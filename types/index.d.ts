@@ -16,6 +16,23 @@ declare namespace fastifyThrottle {
 
   export interface FastifyThrottleOptions {
     bps: number | ((elapsedTime: number, bytes: number) => number)
+    /**
+     * Throttle stream payloads
+     * @default true
+     */
+    streamPayloads?: boolean
+
+    /**
+     * Throttle buffer payloads
+     * @default false
+     */
+    bufferPayloads?: boolean
+
+    /**
+     * Throttle string payloads
+     * @default false
+     */
+    stringPayloads?: boolean
   }
 
   export interface FastifyThrottlePluginOptions extends FastifyThrottleOptions {

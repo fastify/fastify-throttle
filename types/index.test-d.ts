@@ -4,7 +4,12 @@ import { expectType } from 'tsd';
 
 const server = fastify()
 
-server.register(fastifyThrottle, { bps: 1000 })
+server.register(fastifyThrottle, {
+  bps: 1000,
+  streamPayloads: true,
+  bufferPayloads: false,
+  stringPayloads: false
+})
 server.register(fastifyThrottle, {
   bps: (elapsedTime, bytes) => {
     expectType<number>(elapsedTime)
@@ -16,7 +21,10 @@ server.register(fastifyThrottle, {
 server.get('/', {
   config: {
     throttle: {
-      bps: 1000
+      bps: 1000,
+      streamPayloads: true,
+      bufferPayloads: false,
+      stringPayloads: false
     }
   }
 }, (request, reply) => { })

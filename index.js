@@ -3,9 +3,15 @@
 const fp = require('fastify-plugin')
 
 const { ThrottleStream } = require('./lib/throttle-stream')
-const { Readable } = require('stream')
+const { Readable, Stream } = require('stream')
 
 function fastifyThrottle (fastify, options, done) {
+  options = Object.assign({}, options)
+
+  options.streamPayloads = options.streamPayloads ?? true
+  options.bufferPayloads = options.bufferPayloads || false
+  options.stringPayloads = options.stringPayloads || false
+
   fastify.addHook('onRoute', (routeOptions) => {
     const opts = Object.assign({}, options, routeOptions.config?.throttle)
     if (opts.bps) {
@@ -29,18 +35,21 @@ async function addRouteThrottleHook (routeOptions, throttleOptions) {
 
 function throttleOnSendHandler (throttleOpts) {
   const bps = throttleOpts.bps
+
   return function (request, reply, payload, done) {
-    if (payload && payload.pipe) {
+    if (throttleOpts.streamPayloads && payload instanceof Stream) {
       const throttleStream = new ThrottleStream({ bps })
       payload.pipe(throttleStream)
       done(null, throttleStream)
       return
-    } else if (Buffer.isBuffer(payload)) {
+    }
+    if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
       const throttleStream = new ThrottleStream({ bps })
       Readable.from(payload).pipe(throttleStream)
       done(null, throttleStream)
       return
-    } else if (typeof payload === 'string') {
+    }
+    if (throttleOpts.stringPayloads && typeof payload === 'string') {
       const throttleStream = new ThrottleStream({ bps })
       Readable.from(Buffer.from(payload)).pipe(throttleStream)
       done(null, throttleStream)
