@@ -3,7 +3,7 @@
 const t = require('tap')
 const test = t.test
 const Fastify = require('fastify')
-const throttle = require('../index')
+const { fastifyThrottle } = require('../index')
 const { createReadStream } = require('fs')
 const { resolve } = require('path')
 const { assertTimespan } = require('./utils/assert-timespan')
@@ -12,7 +12,7 @@ test('should throttle globally', async t => {
   t.plan(1)
   const fastify = Fastify()
 
-  await fastify.register(throttle, {
+  await fastify.register(fastifyThrottle, {
     bps: 1000
   })
 
@@ -28,7 +28,7 @@ test('should throttle globally and set the bps', async t => {
   t.plan(1)
   const fastify = Fastify()
 
-  await fastify.register(throttle, {
+  await fastify.register(fastifyThrottle, {
     bps: 10000
   })
 

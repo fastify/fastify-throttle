@@ -3,7 +3,7 @@
 const t = require('tap')
 const test = t.test
 const Fastify = require('fastify')
-const fastifyThrottle = require('../index')
+const { fastifyThrottle } = require('../index')
 const { createReadStream } = require('fs')
 const { resolve } = require('path')
 const { assertTimespan } = require('./utils/assert-timespan')
@@ -12,9 +12,7 @@ test('should throttle per route', async t => {
   t.plan(1)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     config: {
@@ -34,9 +32,7 @@ test('should throttle per route and set the bps', async t => {
   t.plan(1)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     config: {
@@ -56,9 +52,7 @@ test('should throttle per route but not effect other routes', async t => {
   t.plan(1)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     config: {
@@ -80,9 +74,7 @@ test('should throttle streams', async t => {
   t.plan(2)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     config: {
@@ -103,9 +95,7 @@ test('should throttle Buffer', async t => {
   t.plan(2)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     config: {
@@ -126,9 +116,7 @@ test('should throttle string', async t => {
   t.plan(2)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     config: {
@@ -149,9 +137,7 @@ test('should work with onSend-hook assigned as route config', async t => {
   t.plan(3)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     onSend: (request, reply, payload, done) => {
@@ -176,9 +162,7 @@ test('should work with onSend-hook-Array assigned as route config', async t => {
   t.plan(3)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     onSend: [(request, reply, payload, done) => {
@@ -203,9 +187,7 @@ test('should not error when sending null', async t => {
   t.plan(3)
   const fastify = Fastify()
 
-  await fastify.register(fastifyThrottle, {
-    global: false
-  })
+  await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
     onSend: [(request, reply, payload, done) => {
