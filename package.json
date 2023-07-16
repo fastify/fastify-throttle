@@ -1,0 +1,46 @@
+{
+  "name": "@fastify/throttle",
+  "version": "1.0.0",
+  "description": "Throttle responses in fastify",
+  "main": "index.js",
+  "types": "types/index.d.ts",
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:unit": "tap",
+    "test:typescript": "tsd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fastify/throttle.git"
+  },
+  "keywords": [
+    "fastify",
+    "throttle"
+  ],
+  "author": "Aras Abbasi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fastify/throttle/issues"
+  },
+  "homepage": "https://github.com/fastify/throttle#readme",
+  "devDependencies": {
+    "@fastify/pre-commit": "^2.0.2",
+    "@types/node": "^20.1.1",
+    "fastify": "^4.7.0",
+    "standard": "^17.0.0",
+    "tap": "^16.0.0",
+    "tsd": "^0.28.0"
+  },
+  "dependencies": {
+    "fastify-plugin": "^4.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
+}
