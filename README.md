@@ -53,12 +53,12 @@ await fastify.register(import('@fastify/throttle'), {
 You can define the throttling globally as plugin options or per route options.
 The throttle options per route are the same as the plugin options.
 
-| Header | Description |
-|--------|-------------|
-|`bytesPerSecond`     | The allowed bytes per second, number or a function |
-|`streamPayloads` | Throttle the payload if it is a stream |
-|`streamBuffers` | Throttle the payload if it is a Buffer |
-|`streamStrings` | Throttle the payload if it is a string |
+| Header | Description | Default |
+|--------|-------------|---------|
+|`bytesPerSecond` | The allowed bytes per second, number or a function | 16384 |
+|`streamPayloads` | Throttle the payload if it is a stream | true |
+|`streamBuffers` | Throttle the payload if it is a Buffer | false |
+|`streamStrings` | Throttle the payload if it is a string | false |
 
 Example for setting throttling globally.
 
