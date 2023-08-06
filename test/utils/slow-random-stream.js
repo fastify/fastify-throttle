@@ -1,6 +1,5 @@
 'use strict'
 
-const inherits = require('util').inherits
 const Readable = require('stream').Readable
 
 /**
@@ -14,8 +13,14 @@ function SlowRandomStream (bytes, delay = 100) {
   this.delay = delay
 }
 
-inherits(SlowRandomStream, Readable)
-
+SlowRandomStream.prototype = Object.create(Readable.prototype, {
+  constructor: {
+    value: SlowRandomStream,
+    enumerable: false,
+    writable: true,
+    configurable: true
+  }
+})
 SlowRandomStream.prototype._read = function (bytes, callback) {
   if (typeof callback !== 'function') callback = function (e, b) { this.push(b) }.bind(this)
   bytes = 1

@@ -7,12 +7,12 @@
 Throttle the download speed of a request.
 
 ## Install
-```
+```sh
 npm i @fastify/throttle
 ```
 
 ## Usage
-Register the plugin and, if required, pass custom options.
+Register the plugin and, if necessary, pass custom options.
 
 This plugin will add an `onSend` hook to the Fastify instance, which will throttle the download speed of the response.
 ```js
@@ -41,7 +41,7 @@ fastify.listen({ port: 3000 }, err => {
 You can pass the following options during the plugin registration:
 ```js
 await fastify.register(import('@fastify/throttle'), {
-  bps: 1000, // bytes per second
+  bps: 1000, // 1000 bytes per second
   streamPayloads: true // throttle the payload if it is a stream
   streamBuffers: true // throttle the payload if it is a Buffer
   streamStrings: true // throttle the payload if it is a string

@@ -1,6 +1,5 @@
 'use strict'
 
-const inherits = require('util').inherits
 const Readable = require('stream').Readable
 
 /**
@@ -12,7 +11,14 @@ function RandomStream (bytes) {
   this.remaining = +bytes
 }
 
-inherits(RandomStream, Readable)
+RandomStream.prototype = Object.create(Readable.prototype, {
+  constructor: {
+    value: RandomStream,
+    enumerable: false,
+    writable: true,
+    configurable: true
+  }
+})
 
 RandomStream.prototype._read = function (bytes, callback) {
   if (typeof callback !== 'function') {

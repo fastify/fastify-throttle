@@ -4,9 +4,8 @@ const t = require('tap')
 const test = t.test
 const Fastify = require('fastify')
 const { fastifyThrottle } = require('../index')
-const { createReadStream } = require('fs')
-const { resolve } = require('path')
 const { assertTimespan } = require('./utils/assert-timespan')
+const { RandomStream } = require('./utils/random-stream')
 
 test('should throttle globally', async t => {
   t.plan(1)
@@ -16,12 +15,12 @@ test('should throttle globally', async t => {
     bps: 1000
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(createReadStream(resolve(__dirname, './fixtures/random-1kb.file'))) })
+  fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
   await fastify.inject('/throttled')
-  assertTimespan(t, startTime, Date.now(), 1000, 30)
+  assertTimespan(t, startTime, Date.now(), 2000)
 })
 
 test('should throttle globally and set the bps', async t => {
@@ -32,10 +31,10 @@ test('should throttle globally and set the bps', async t => {
     bps: 10000
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(createReadStream(resolve(__dirname, './fixtures/random-30kb.file'))) })
+  fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(30000)) })
 
   const startTime = Date.now()
 
   await fastify.inject('/throttled')
-  assertTimespan(t, startTime, Date.now(), 3000, 30)
+  assertTimespan(t, startTime, Date.now(), 2000)
 })

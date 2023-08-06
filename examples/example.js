@@ -3,12 +3,14 @@
 const { createReadStream } = require('fs')
 const { resolve } = require('path')
 const { fastifyThrottle } = require('../index')
+const { RandomStream } = require('../test/utils/random-stream')
 
 async function main () {
   const fastify = require('fastify')()
 
   await fastify.register(fastifyThrottle, {
-    bps: 1000
+    bps: 1000,
+    streamPayloads: true
   })
 
   fastify.get('/string', (req, reply) => {
@@ -20,7 +22,7 @@ async function main () {
   })
 
   fastify.get('/stream', (req, reply) => {
-    reply.send(createReadStream(resolve(__dirname, '../test/fixtures/random-30kb.file')))
+    reply.send(new RandomStream(30000))
   })
 
   fastify.get('/delayed', {
@@ -44,7 +46,12 @@ async function main () {
     reply.send({ payload })
   })
 
-  fastify.listen({ port: 3000 })
+  fastify.listen({ port: 3000 }, (err, address) => {
+    if (err) {
+      console.error(err)
+    }
+    console.log(address)
+  })
 }
 
 (async () => await main())()
