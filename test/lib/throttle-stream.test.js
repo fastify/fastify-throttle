@@ -34,6 +34,7 @@ test('should delay the stream for 2 seconds', t => {
   t.equal(throttle.bytesPerSecondFn(1.999, 0), 0)
   t.equal(throttle.bytesPerSecondFn(2, 0), Infinity)
 })
+
 test('should take ~0 second to read 10,000 bytes at 10000bytesPerSecond', t => {
   t.plan(2)
   const r = new RandomStream(10000)
@@ -84,6 +85,7 @@ test('should take ~0 seconds to read 1,024 bytes at 1024bytesPerSecond', t => {
   })
   r.pipe(throttle)
 })
+
 test('should take ~3 seconds to read 4096 bytes at 1024bytesPerSecond', t => {
   t.plan(2)
   const r = new RandomStream(4096)
