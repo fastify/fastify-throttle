@@ -36,7 +36,7 @@ async function addRouteThrottleHook (fastify, routeOptions, throttleOptions) {
 function throttleOnSendHandler (fastify, throttleOpts) {
   const bps = throttleOpts.bps
 
-  return function (request, reply, payload, done) {
+  return function onSendHandler (request, reply, payload, done) {
     if (throttleOpts.streamPayloads && payload instanceof Stream) {
       done(null, pipeline(
         payload,

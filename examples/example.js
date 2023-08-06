@@ -9,8 +9,10 @@ async function main () {
   const fastify = require('fastify')()
 
   await fastify.register(fastifyThrottle, {
-    bps: 1000,
-    streamPayloads: true
+    bps: 10000,
+    streamPayloads: true,
+    stringPayloads: true,
+    bufferPayloads: true
   })
 
   fastify.get('/string', (req, reply) => {
@@ -42,7 +44,7 @@ async function main () {
   })
 
   fastify.get('/pojo', (req, reply) => {
-    const payload = Array(1000).fill(0).map(v => (Math.random() * 1e6).toString(36))
+    const payload = Array(10000).fill(0).map(v => (Math.random() * 1e6).toString(36))
     reply.send({ payload })
   })
 
