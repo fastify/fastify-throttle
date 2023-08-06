@@ -5,6 +5,7 @@ const { assertTimespan } = require('../utils/assert-timespan')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
 const { SlowRandomStream } = require('../utils/slow-random-stream')
+const { pipeline } = require('stream')
 
 test('should delay the stream for 2 seconds', t => {
   t.plan(7)
@@ -152,4 +153,26 @@ test('should use by default 16384 as return value of bytesPerSecondFn', t => {
   r.pipe(throttle)
 
   t.equal(throttle.bytesPerSecondFn(0, 0), 16384)
+})
+
+test('should handle errors properly', t => {
+  t.plan(5)
+
+  const start = Date.now()
+
+  const r = new RandomStream(10000)
+  const throttle = new ThrottleStream({ bytesPerSecond: 1000 })
+
+  throttle.on('data', function () {
+    t.ok(Date.now() - start < 1500)
+  })
+
+  setTimeout(() => throttle.emit('error', new Error('ArbitraryError')), 1500)
+  pipeline(
+    r,
+    throttle,
+    err => { t.equal(err.message, 'ArbitraryError') }
+  )
+  t.equal(throttle._buffer, null)
+  t.equal(throttle._interval, null)
 })
