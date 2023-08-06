@@ -7,28 +7,22 @@ const Readable = require('stream').Readable
  * @param {number} bytes
  * @param {number} [delay=100]
  */
-function SlowRandomStream (bytes, delay = 100) {
-  Readable.call(this)
-  this.remaining = +bytes
-  this.delay = delay
-}
-
-SlowRandomStream.prototype = Object.create(Readable.prototype, {
-  constructor: {
-    value: SlowRandomStream,
-    enumerable: false,
-    writable: true,
-    configurable: true
+class SlowRandomStream extends Readable {
+  constructor (bytes, delay = 100) {
+    super()
+    this.remaining = +bytes
+    this.delay = delay
   }
-})
-SlowRandomStream.prototype._read = function (bytes, callback) {
-  if (typeof callback !== 'function') callback = function (e, b) { this.push(b) }.bind(this)
-  bytes = 1
-  this.remaining -= bytes
-  if (this.remaining >= 0) {
-    setTimeout(callback.bind(null, null, Buffer.alloc(bytes)), this.delay)
-  } else {
-    callback(null, null) // emit "end"
+
+  _read (bytes, callback) {
+    if (typeof callback !== 'function') callback = function (e, b) { this.push(b) }.bind(this)
+    bytes = 1
+    this.remaining -= bytes
+    if (this.remaining >= 0) {
+      setTimeout(callback.bind(null, null, Buffer.alloc(bytes)), this.delay)
+    } else {
+      callback(null, null) // emit "end"
+    }
   }
 }
 
