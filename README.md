@@ -98,16 +98,16 @@ Example for setting the throttling per route:
   fastify.listen({ port: 3000 })
 ```
 
-The `bps` option can be a number or a function. The function for `bps` has the following types: 
+The `bps` option can be a number or a function. The function for `bps` has the following typescript definition: 
 
 ```typescript
-function bpsFn (elapsedTime: number, bytes: number): number {
-  return 1000
-}
+(elapsedTime: number, bytes: number) => number
 ```
 
 `elapsedTime` is the time since the streaming started in seconds.
 `bytes` are the bytes already sent.
+
+You must ensure, that the return value is an integer or `Infinity`.
 
 You could for example delay the output by sending 0 the first 2 seconds by defining
 the `bps` like this:
