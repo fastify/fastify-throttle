@@ -31,7 +31,9 @@ fastify.get('/', (request, reply) => {
 })
 
 fastify.listen({ port: 3000 }, err => {
-  if (err) throw err
+  if (err) {
+    throw err
+  }
   console.log('Server listening at http://localhost:3000')
 })
 ```
