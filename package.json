@@ -30,11 +30,10 @@
   "homepage": "https://github.com/fastify/fastify-throttle#readme",
   "devDependencies": {
     "@fastify/pre-commit": "^2.0.2",
-    "@types/node": "^20.1.1",
-    "fastify": "^4.7.0",
-    "standard": "^17.0.0",
-    "tap": "^16.0.0",
-    "tsd": "^0.28.0"
+    "fastify": "^4.21.0",
+    "standard": "^17.1.0",
+    "tap": "^16.3.8",
+    "tsd": "^0.28.1"
   },
   "dependencies": {
     "fastify-plugin": "^4.0.0"
