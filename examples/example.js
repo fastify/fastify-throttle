@@ -9,7 +9,7 @@ async function main () {
   const fastify = require('fastify')()
 
   await fastify.register(fastifyThrottle, {
-    bps: 10000,
+    bytesPerSecond: 10000,
     streamPayloads: true,
     stringPayloads: true,
     bufferPayloads: true
@@ -30,7 +30,7 @@ async function main () {
   fastify.get('/delayed', {
     config: {
       throttle: {
-        bps: function (elapsedTime, bytes) {
+        bytesPerSecond: function (elapsedTime, bytes) {
           if (elapsedTime < 2) {
             return 0
           } else {

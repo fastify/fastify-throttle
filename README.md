@@ -20,7 +20,7 @@ import Fastify from 'fastify'
 
 const fastify = Fastify()
 await fastify.register(import('@fastify/throttle'), {#
-  bps: 1024 * 1024 // 1MB/s
+  bytesPerSecond: 1024 * 1024 // 1MB/s
   streamPayloads: true // throttle the payload if it is a stream
   streamBuffers: true // throttle the payload if it is a Buffer
   streamStrings: true // throttle the payload if it is a string
@@ -41,7 +41,7 @@ fastify.listen({ port: 3000 }, err => {
 You can pass the following options during the plugin registration:
 ```js
 await fastify.register(import('@fastify/throttle'), {
-  bps: 1000, // 1000 bytes per second
+  bytesPerSecond: 1000, // 1000 bytes per second
   streamPayloads: true // throttle the payload if it is a stream
   streamBuffers: true // throttle the payload if it is a Buffer
   streamStrings: true // throttle the payload if it is a string
@@ -53,7 +53,7 @@ The throttle options per route are the same as the plugin options.
 
 | Header | Description |
 |--------|-------------|
-|`bps`     | The allowed bytes per second, number or a function |
+|`bytesPerSecond`     | The allowed bytes per second, number or a function |
 |`streamPayloads` | Throttle the payload if it is a stream |
 |`streamBuffers` | Throttle the payload if it is a Buffer |
 |`streamStrings` | Throttle the payload if it is a string |
@@ -66,7 +66,7 @@ Example for setting throttling globally.
   const fastify = require('fastify')()
 
   await fastify.register(require('../index'), {
-    bps: 1024 // 1KB/s
+    bytesPerSecond: 1024 // 1KB/s
   })
 
   fastify.get('/', (req, reply) => {
@@ -88,7 +88,7 @@ Example for setting the throttling per route:
   fastify.get('/', {
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => {
@@ -98,7 +98,7 @@ Example for setting the throttling per route:
   fastify.listen({ port: 3000 })
 ```
 
-The `bps` option can be a number or a function. The function for `bps` has the following typescript definition: 
+The `bytesPerSecond` option can be a number or a function. The function for `bytesPerSecond` has the following typescript definition: 
 
 ```typescript
 (elapsedTime: number, bytes: number) => number
@@ -110,7 +110,7 @@ The `bps` option can be a number or a function. The function for `bps` has the f
 You must ensure, that the return value is an integer or `Infinity`.
 
 You could for example delay the output by sending 0 the first 2 seconds by defining
-the `bps` like this:
+the `bytesPerSecond` like this:
 
 ```js
   'use strict'
@@ -122,7 +122,7 @@ the `bps` like this:
   fastify.get('/', {
     config: {
       throttle: {
-        bps: function (elapsedTime, bytes) {
+        bytesPerSecond: function (elapsedTime, bytes) {
           if (elapsedTime < 2) {
             return 0
           } else {

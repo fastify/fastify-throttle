@@ -15,7 +15,7 @@ type FastifyThrottle = FastifyPluginCallback<fastifyThrottle.FastifyThrottleOpti
 declare namespace fastifyThrottle {
 
   export interface FastifyThrottleOptions {
-    bps: number | ((elapsedTime: number, bytes: number) => number)
+    bytesPerSecond: number | ((elapsedTime: number, bytes: number) => number)
     /**
      * Throttle stream payloads
      * @default true

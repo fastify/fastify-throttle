@@ -12,7 +12,7 @@ test('should throttle globally', async t => {
   const fastify = Fastify()
 
   await fastify.register(fastifyThrottle, {
-    bps: 1000
+    bytesPerSecond: 1000
   })
 
   fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(3000)) })
@@ -23,12 +23,12 @@ test('should throttle globally', async t => {
   assertTimespan(t, startTime, Date.now(), 2000)
 })
 
-test('should throttle globally and set the bps', async t => {
+test('should throttle globally and set the bytesPerSecond', async t => {
   t.plan(1)
   const fastify = Fastify()
 
   await fastify.register(fastifyThrottle, {
-    bps: 10000
+    bytesPerSecond: 10000
   })
 
   fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(30000)) })

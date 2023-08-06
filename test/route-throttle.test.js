@@ -16,7 +16,7 @@ test('should throttle per route', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(new RandomStream(3000)) })
@@ -27,7 +27,7 @@ test('should throttle per route', async t => {
   assertTimespan(t, startTime, Date.now(), 2000)
 })
 
-test('should throttle per route and set the bps', async t => {
+test('should throttle per route and set the bytesPerSecond', async t => {
   t.plan(1)
   const fastify = Fastify()
 
@@ -36,7 +36,7 @@ test('should throttle per route and set the bps', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 10000
+        bytesPerSecond: 10000
       }
     }
   }, (req, reply) => { reply.send(new RandomStream(30000)) })
@@ -56,7 +56,7 @@ test('should throttle per route but not effect other routes', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(new RandomStream(3000)) })
@@ -78,7 +78,7 @@ test('should throttle streams', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(new RandomStream(3000)) })
@@ -99,7 +99,7 @@ test('should throttle streams if streamPayloads is set to true', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 1000,
+        bytesPerSecond: 1000,
         streamPayloads: true
       }
     }
@@ -121,7 +121,7 @@ test('should not throttle streams if streamPayloads is set to false', async t =>
   fastify.get('/', {
     config: {
       throttle: {
-        bps: 1000,
+        bytesPerSecond: 1000,
         streamPayloads: false
       }
     }
@@ -143,7 +143,7 @@ test('should not throttle Buffer if bufferPayloads is not set', async t => {
   fastify.get('/', {
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(Buffer.alloc(1000)) })
@@ -164,7 +164,7 @@ test('should not throttle Buffer if bufferPayloads is set to false', async t => 
   fastify.get('/', {
     config: {
       throttle: {
-        bps: 1000,
+        bytesPerSecond: 1000,
         bufferPayloads: false
       }
     }
@@ -186,7 +186,7 @@ test('should throttle Buffer if bufferPayloads is set to true', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 1000,
+        bytesPerSecond: 1000,
         bufferPayloads: true
       }
     }
@@ -208,7 +208,7 @@ test('should not throttle strings by default', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(Buffer.alloc(1000).toString()) })
@@ -230,7 +230,7 @@ test('should not throttle strings if stringPayloads is set to false', async t =>
     config: {
       throttle: {
         stringPayloads: false,
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(Buffer.alloc(1000).toString()) })
@@ -251,7 +251,7 @@ test('should throttle string when stringPayloads is true', async t => {
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bps: 1000,
+        bytesPerSecond: 1000,
         stringPayloads: true
       }
     }
@@ -277,7 +277,7 @@ test('should work with onSend-hook assigned as route config', async t => {
     },
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(new RandomStream(3000)) })
@@ -302,7 +302,7 @@ test('should work with onSend-hook-Array assigned as route config', async t => {
     }],
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(new RandomStream(3000)) })
@@ -327,7 +327,7 @@ test('should not error when sending null', async t => {
     }],
     config: {
       throttle: {
-        bps: 1000
+        bytesPerSecond: 1000
       }
     }
   }, (req, reply) => { reply.send(null) })

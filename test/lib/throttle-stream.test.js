@@ -10,7 +10,7 @@ test('should delay the stream for 2 seconds', t => {
   t.plan(7)
   const r = new RandomStream(16384 * 2) // should take ~2 seconds
   const throttle = new ThrottleStream({
-    bps: function (elapsedTime, bytes) {
+    bytesPerSecond: function (elapsedTime, bytes) {
       if (elapsedTime < 2) {
         return 0
       } else {
@@ -30,14 +30,14 @@ test('should delay the stream for 2 seconds', t => {
   })
   r.pipe(throttle)
 
-  t.equal(throttle.bpsFn(0, 0), 0)
-  t.equal(throttle.bpsFn(1.999, 0), 0)
-  t.equal(throttle.bpsFn(2, 0), Infinity)
+  t.equal(throttle.bytesPerSecondFn(0, 0), 0)
+  t.equal(throttle.bytesPerSecondFn(1.999, 0), 0)
+  t.equal(throttle.bytesPerSecondFn(2, 0), Infinity)
 })
-test('should take ~0 second to read 10,000 bytes at 10000bps', t => {
+test('should take ~0 second to read 10,000 bytes at 10000bytesPerSecond', t => {
   t.plan(2)
   const r = new RandomStream(10000)
-  const throttle = ThrottleStream({ bps: 10000 })
+  const throttle = ThrottleStream({ bytesPerSecond: 10000 })
   const start = Date.now()
   let bytes = 0
   throttle.on('data', function (data) {
@@ -51,10 +51,10 @@ test('should take ~0 second to read 10,000 bytes at 10000bps', t => {
   r.pipe(throttle)
 })
 
-test('should take ~1 second to read 20,000 bytes at 10000bps', t => {
+test('should take ~1 second to read 20,000 bytes at 10000bytesPerSecond', t => {
   t.plan(2)
   const r = new RandomStream(20000)
-  const throttle = new ThrottleStream({ bps: 10000 })
+  const throttle = new ThrottleStream({ bytesPerSecond: 10000 })
   const start = Date.now()
   let bytes = 0
   throttle.on('data', function (data) {
@@ -68,10 +68,10 @@ test('should take ~1 second to read 20,000 bytes at 10000bps', t => {
   r.pipe(throttle)
 })
 
-test('should take ~0 seconds to read 1,024 bytes at 1024bps', t => {
+test('should take ~0 seconds to read 1,024 bytes at 1024bytesPerSecond', t => {
   t.plan(2)
   const r = new RandomStream(1024)
-  const throttle = new ThrottleStream({ bps: 1024 })
+  const throttle = new ThrottleStream({ bytesPerSecond: 1024 })
   const start = Date.now()
   let bytes = 0
   throttle.on('data', function (data) {
@@ -84,10 +84,10 @@ test('should take ~0 seconds to read 1,024 bytes at 1024bps', t => {
   })
   r.pipe(throttle)
 })
-test('should take ~3 seconds to read 4096 bytes at 1024bps', t => {
+test('should take ~3 seconds to read 4096 bytes at 1024bytesPerSecond', t => {
   t.plan(2)
   const r = new RandomStream(4096)
-  const throttle = new ThrottleStream({ bps: 1024 })
+  const throttle = new ThrottleStream({ bytesPerSecond: 1024 })
   const start = Date.now()
   let bytes = 0
   throttle.on('data', function (data) {
@@ -104,7 +104,7 @@ test('should take ~3 seconds to read 4096 bytes at 1024bps', t => {
 test('should work as expected with a slow readable', t => {
   t.plan(2)
   const r = new SlowRandomStream(10) // should take ~1 second
-  const throttle = new ThrottleStream({ bps: 100 }) // ~10x faster than the slow stream
+  const throttle = new ThrottleStream({ bytesPerSecond: 100 }) // ~10x faster than the slow stream
   const start = Date.now()
   let bytes = 0
   throttle.on('data', function (data) {
@@ -118,10 +118,10 @@ test('should work as expected with a slow readable', t => {
   r.pipe(throttle)
 })
 
-test('should work as expected with a when input stream is providing bigger chunk than bps', t => {
+test('should work as expected with a when input stream is providing bigger chunk than bytesPerSecond', t => {
   t.plan(2)
   const r = new RandomStream(3000) // should take ~2 seconds
-  const throttle = new ThrottleStream({ bps: 1000 }) // ~3x slower than the slow stream
+  const throttle = new ThrottleStream({ bytesPerSecond: 1000 }) // ~3x slower than the slow stream
   const start = Date.now()
   let bytes = 0
   throttle.on('data', function (data) {
@@ -134,7 +134,7 @@ test('should work as expected with a when input stream is providing bigger chunk
   r.pipe(throttle)
 })
 
-test('should use by default 16384 as return value of bpsFn', t => {
+test('should use by default 16384 as return value of bytesPerSecondFn', t => {
   t.plan(3)
   const r = new RandomStream(16384 * 2) // should take ~2 seconds
   const throttle = new ThrottleStream()
@@ -149,5 +149,5 @@ test('should use by default 16384 as return value of bpsFn', t => {
   })
   r.pipe(throttle)
 
-  t.equal(throttle.bpsFn(0, 0), 16384)
+  t.equal(throttle.bytesPerSecondFn(0, 0), 16384)
 })

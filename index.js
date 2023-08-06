@@ -14,7 +14,7 @@ function fastifyThrottle (fastify, options, done) {
 
   fastify.addHook('onRoute', (routeOptions) => {
     const opts = Object.assign({}, options, routeOptions.config?.throttle)
-    if (opts.bps) {
+    if (opts.bytesPerSecond) {
       addRouteThrottleHook(fastify, routeOptions, opts)
     }
   })
@@ -34,13 +34,13 @@ async function addRouteThrottleHook (fastify, routeOptions, throttleOptions) {
 }
 
 function throttleOnSendHandler (fastify, throttleOpts) {
-  const bps = throttleOpts.bps
+  const bytesPerSecond = throttleOpts.bytesPerSecond
 
   return function onSendHandler (request, reply, payload, done) {
     if (throttleOpts.streamPayloads && payload instanceof Stream) {
       done(null, pipeline(
         payload,
-        new ThrottleStream({ bps }),
+        new ThrottleStream({ bytesPerSecond }),
         err => { fastify.log.error(err) }
       ))
       return
@@ -48,7 +48,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
     if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
       done(null, pipeline(
         Readable.from(payload),
-        new ThrottleStream({ bps }),
+        new ThrottleStream({ bytesPerSecond }),
         err => { fastify.log.error(err) }
       ))
       return
@@ -56,7 +56,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
     if (throttleOpts.stringPayloads && typeof payload === 'string') {
       done(null, pipeline(
         Readable.from(Buffer.from(payload)),
-        new ThrottleStream({ bps }),
+        new ThrottleStream({ bytesPerSecond }),
         err => { fastify.log.error(err) }
       ))
       return
