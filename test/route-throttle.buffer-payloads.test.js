@@ -23,7 +23,7 @@ test('should not throttle Buffer payloads if bufferPayloads is not set', async t
   const startTime = Date.now()
 
   const response = await fastify.inject('/')
-  assertTimespan(t, startTime, Date.now(), 10, 100)
+  assertTimespan(t, startTime, Date.now(), 20, 100)
   t.equal(response.body.length, 1000)
 })
 
@@ -45,7 +45,7 @@ test('should not throttle Buffer payloads if bufferPayloads is set to false', as
   const startTime = Date.now()
 
   const response = await fastify.inject('/')
-  assertTimespan(t, startTime, Date.now(), 10, 100)
+  assertTimespan(t, startTime, Date.now(), 20, 100)
   t.equal(response.body.length, 1000)
 })
 

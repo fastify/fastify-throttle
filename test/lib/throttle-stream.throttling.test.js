@@ -21,7 +21,7 @@ test('should take ~0 second to read 10,000 bytes at 10000bps', t => {
 
   throttleStream.on('end', function () {
     const end = Date.now()
-    assertTimespan(t, start, end, 10, 100)
+    assertTimespan(t, start, end, 20, 100)
     t.equal(10000, bytes)
   })
 

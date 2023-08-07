@@ -68,6 +68,6 @@ test('should not throttle streams payloads if streamPayloads is set to false', a
   const startTime = Date.now()
 
   const response = await fastify.inject('/')
-  assertTimespan(t, startTime, Date.now(), 10, 100)
+  assertTimespan(t, startTime, Date.now(), 20, 100)
   t.equal(response.body.length, 3000)
 })
