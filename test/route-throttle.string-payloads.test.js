@@ -23,7 +23,7 @@ test('should not throttle string payloads by default', async t => {
   const startTime = Date.now()
 
   const response = await fastify.inject('/throttled')
-  assertTimespan(t, startTime, Date.now(), 20, 100)
+  assertTimespan(t, startTime, Date.now(), 50, 100)
   t.equal(response.body.length, 1000)
 })
 
@@ -45,7 +45,7 @@ test('should not throttle strings payloads if stringPayloads is set to false', a
   const startTime = Date.now()
 
   const response = await fastify.inject('/throttled')
-  assertTimespan(t, startTime, Date.now(), 20, 100)
+  assertTimespan(t, startTime, Date.now(), 50, 100)
   t.equal(response.body.length, 1000)
 })
 

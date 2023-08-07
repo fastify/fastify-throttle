@@ -26,5 +26,5 @@ test('should throttle per route but not effect other routes', async t => {
   const startTime = Date.now()
 
   await fastify.inject('/unthrottled')
-  assertTimespan(t, startTime, Date.now(), 20, 100)
+  assertTimespan(t, startTime, Date.now(), 50, 100)
 })

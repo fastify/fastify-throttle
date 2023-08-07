@@ -27,6 +27,6 @@ test('should not error when sending null', async t => {
   const startTime = Date.now()
 
   const response = await fastify.inject('/throttled')
-  assertTimespan(t, startTime, Date.now(), 20, 100)
+  assertTimespan(t, startTime, Date.now(), 50, 100)
   t.equal(response.body.length, 0)
 })

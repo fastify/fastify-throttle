@@ -13,7 +13,7 @@ test('should work as expected with a slow readable', t => {
   const slowRandomStream = new SlowRandomStream(10) // should take ~1 second
   const throttleStream = new ThrottleStream({ bytesPerSecond: 100 }) // ~10x faster than the slow stream
 
-  const start = Date.now()
+  const startTime = Date.now()
 
   let bytes = 0
   throttleStream.on('data', function (data) {
@@ -21,8 +21,7 @@ test('should work as expected with a slow readable', t => {
   })
 
   throttleStream.on('end', function () {
-    const end = Date.now()
-    assertTimespan(t, start, end, 1000)
+    assertTimespan(t, startTime, Date.now(), 1000)
     t.equal(10, bytes)
   })
 
@@ -38,7 +37,7 @@ test('should work as expected with a when input stream is providing bigger chunk
 
   const randomStream = new RandomStream(3000) // should take ~2 seconds
   const throttleStream = new ThrottleStream({ bytesPerSecond: 1000 }) // ~3x slower than the slow stream
-  const start = Date.now()
+  const startTime = Date.now()
 
   let bytes = 0
   throttleStream.on('data', function (data) {
@@ -46,7 +45,7 @@ test('should work as expected with a when input stream is providing bigger chunk
   })
 
   throttleStream.on('end', function () {
-    assertTimespan(t, start, Date.now(), 2000)
+    assertTimespan(t, startTime, Date.now(), 2000)
     t.equal(3000, bytes)
   })
 

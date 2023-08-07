@@ -19,14 +19,14 @@ test('should delay the stream for 2 seconds', t => {
       }
     }
   })
-  const start = Date.now()
+  const startTime = Date.now()
   let bytes = 0
   throttleStream.on('data', function (data) {
-    t.ok(Date.now() - start > 2000)
+    t.ok(Date.now() - startTime > 2000)
     bytes += data.length
   })
   throttleStream.on('end', function () {
-    assertTimespan(t, start, Date.now(), 2000)
+    assertTimespan(t, startTime, Date.now(), 2000)
     t.equal(16384 * 2, bytes)
   })
 
