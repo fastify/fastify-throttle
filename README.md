@@ -117,7 +117,7 @@ the `bytesPerSecond` like this:
 
   const fastify = require('fastify')()
 
-  await fastify.register(require('../index'))
+  await fastify.register(import('@fastify/throttle'))
 
   fastify.get('/', {
     config: {
