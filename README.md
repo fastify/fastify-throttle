@@ -83,7 +83,7 @@ Example for setting the throttling per route:
 
   const fastify = require('fastify')()
 
-  await fastify.register(require('../index'))
+  await fastify.register(import('@fastify/throttle'))
 
   fastify.get('/', {
     config: {
