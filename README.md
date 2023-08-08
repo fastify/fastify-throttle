@@ -60,7 +60,7 @@ The throttle options per route are the same as the plugin options.
 |`streamBuffers` | Throttle the payload if it is a Buffer | false |
 |`streamStrings` | Throttle the payload if it is a string | false |
 
-Example for setting throttling globally.
+Example for setting throttling globally:
 
 ```js
   'use strict'
@@ -100,7 +100,7 @@ Example for setting the throttling per route:
   fastify.listen({ port: 3000 })
 ```
 
-The `bytesPerSecond` option can be a number or a function. The function for `bytesPerSecond` has the following typescript definition: 
+The `bytesPerSecond` option can be a number or a function. The function for `bytesPerSecond` has the following TypeScript definition: 
 
 ```typescript
 (elapsedTime: number, bytes: number) => number
@@ -111,7 +111,7 @@ The `bytesPerSecond` option can be a number or a function. The function for `byt
 
 You must ensure, that the return value is an integer or `Infinity`.
 
-You could for example delay the output by sending 0 the first 2 seconds by defining
+You could, for example, delay the output by sending 0 for the first 2 seconds by defining
 the `bytesPerSecond` like this:
 
 ```js
