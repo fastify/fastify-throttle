@@ -113,8 +113,6 @@ You could, for example, delay the output by sending 0 for the first 2 seconds by
 the `bytesPerSecond` like this:
 
 ```js
-  'use strict'
-
   const fastify = require('fastify')()
 
   await fastify.register(import('@fastify/throttle'))
