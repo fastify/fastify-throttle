@@ -65,7 +65,7 @@ Example for setting throttling globally:
 ```js
   const fastify = require('fastify')()
 
-  await fastify.register(require('../index'), {
+  await fastify.register(import('@fastify/throttle'), {
     bytesPerSecond: 1024 // 1KB/s
   })
 
