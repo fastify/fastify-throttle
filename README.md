@@ -63,8 +63,6 @@ The throttle options per route are the same as the plugin options.
 Example for setting throttling globally:
 
 ```js
-  'use strict'
-
   const fastify = require('fastify')()
 
   await fastify.register(require('../index'), {
