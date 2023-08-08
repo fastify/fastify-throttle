@@ -109,7 +109,7 @@ The `bytesPerSecond` option can be a number or a function. The function for `byt
 `elapsedTime` is the time since the streaming started in seconds.
 `bytes` are the bytes already sent.
 
-You must ensure, that the return value is an integer or `Infinity`.
+You must ensure that the return value is an integer or `Infinity`.
 
 You could, for example, delay the output by sending 0 for the first 2 seconds by defining
 the `bytesPerSecond` like this:
