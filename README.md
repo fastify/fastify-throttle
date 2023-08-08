@@ -22,8 +22,8 @@ const fastify = Fastify()
 await fastify.register(import('@fastify/throttle'), {
   bytesPerSecond: 1024 * 1024 // 1MB/s
   streamPayloads: true // throttle the payload if it is a stream
-  streamBuffers: true // throttle the payload if it is a Buffer
-  streamStrings: true // throttle the payload if it is a string
+  bufferPayloads: true // throttle the payload if it is a Buffer
+  stringPayloads: true // throttle the payload if it is a string
 })
 
 fastify.get('/', (request, reply) => {
@@ -45,8 +45,8 @@ You can pass the following options during the plugin registration:
 await fastify.register(import('@fastify/throttle'), {
   bytesPerSecond: 1000, // 1000 bytes per second
   streamPayloads: true // throttle the payload if it is a stream
-  streamBuffers: true // throttle the payload if it is a Buffer
-  streamStrings: true // throttle the payload if it is a string
+  bufferPayloads: true // throttle the payload if it is a Buffer
+  stringPayloads: true // throttle the payload if it is a string
 })
 ```
 
@@ -57,8 +57,8 @@ The throttle options per route are the same as the plugin options.
 |--------|-------------|---------|
 |`bytesPerSecond` | The allowed bytes per second, number or a function | 16384 |
 |`streamPayloads` | Throttle the payload if it is a stream | true |
-|`streamBuffers` | Throttle the payload if it is a Buffer | false |
-|`streamStrings` | Throttle the payload if it is a string | false |
+|`bufferPayloads` | Throttle the payload if it is a Buffer | false |
+|`stringPayloads` | Throttle the payload if it is a string | false |
 
 Example for setting throttling globally:
 
