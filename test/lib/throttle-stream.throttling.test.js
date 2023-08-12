@@ -7,7 +7,7 @@ const { RandomStream } = require('../utils/random-stream')
 const { pipeline } = require('stream')
 
 test('should take ~0 second to read 10,000 bytes at 10000bps', t => {
-  t.plan(3)
+  t.plan(4)
 
   const randomStream = new RandomStream(10000)
   const throttleStream = ThrottleStream({ bytesPerSecond: 10000 })
@@ -22,6 +22,7 @@ test('should take ~0 second to read 10,000 bytes at 10000bps', t => {
   throttleStream.on('end', function () {
     assertTimespan(t, startTime, Date.now(), 50, 100)
     t.equal(10000, bytes)
+    t.equal(bytes, throttleStream.bytes)
   })
 
   pipeline(
@@ -32,7 +33,7 @@ test('should take ~0 second to read 10,000 bytes at 10000bps', t => {
 })
 
 test('should take ~1 second to read 20,000 bytes at 10000bps', t => {
-  t.plan(3)
+  t.plan(4)
 
   const randomStream = new RandomStream(20000)
   const throttleStream = new ThrottleStream({ bytesPerSecond: 10000 })
@@ -44,6 +45,7 @@ test('should take ~1 second to read 20,000 bytes at 10000bps', t => {
   throttleStream.on('end', function () {
     assertTimespan(t, startTime, Date.now(), 1000)
     t.equal(20000, bytes)
+    t.equal(bytes, throttleStream.bytes)
   })
 
   pipeline(
@@ -54,7 +56,7 @@ test('should take ~1 second to read 20,000 bytes at 10000bps', t => {
 })
 
 test('should take ~3 seconds to read 4096 bytes at 1024bps', t => {
-  t.plan(3)
+  t.plan(4)
 
   const randomStream = new RandomStream(4096)
   const throttleStream = new ThrottleStream({ bytesPerSecond: 1024 })
@@ -69,6 +71,7 @@ test('should take ~3 seconds to read 4096 bytes at 1024bps', t => {
   throttleStream.on('end', function () {
     assertTimespan(t, startTime, Date.now(), 3000)
     t.equal(4096, bytes)
+    t.equal(bytes, throttleStream.bytes)
   })
 
   pipeline(
