@@ -3,7 +3,7 @@
 const fp = require('fastify-plugin')
 
 const { ThrottleStream } = require('./lib/throttle-stream')
-const { Readable, Stream, pipeline } = require('stream')
+const { Readable, Stream, pipeline } = require('node:stream')
 
 function fastifyThrottle (fastify, options, done) {
   options = Object.assign({}, options)

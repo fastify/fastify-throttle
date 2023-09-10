@@ -4,7 +4,7 @@ const { test } = require('tap')
 const { assertTimespan } = require('../utils/assert-timespan')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
-const { pipeline } = require('stream')
+const { pipeline } = require('node:stream')
 
 test('should delay the stream for 2 seconds', t => {
   t.plan(8)

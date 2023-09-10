@@ -1,7 +1,7 @@
 'use strict'
 
-const { createReadStream } = require('fs')
-const { resolve } = require('path')
+const { createReadStream } = require('node:fs')
+const { resolve } = require('node:path')
 const { fastifyThrottle } = require('../index')
 const { RandomStream } = require('../test/utils/random-stream')
 

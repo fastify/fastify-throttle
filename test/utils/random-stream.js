@@ -1,6 +1,6 @@
 'use strict'
 
-const Readable = require('stream').Readable
+const Readable = require('node:stream').Readable
 
 /**
  * Readable stream implementation that outputs random data very quickly

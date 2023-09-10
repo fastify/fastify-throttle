@@ -1,6 +1,6 @@
 'use strict'
 
-const Readable = require('stream').Readable
+const Readable = require('node:stream').Readable
 
 /**
  * Readable stream impl that outputs random data with a 100 ms delay per byte
