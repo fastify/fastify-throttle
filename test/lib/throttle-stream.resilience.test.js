@@ -3,7 +3,7 @@
 const { test } = require('tap')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
-const { pipeline } = require('stream')
+const { pipeline } = require('node:stream')
 
 test('_init is resilient against errors', t => {
   t.plan(3)

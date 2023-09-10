@@ -5,7 +5,7 @@ const { assertTimespan } = require('../utils/assert-timespan')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
 const { SlowRandomStream } = require('../utils/slow-random-stream')
-const { pipeline } = require('stream')
+const { pipeline } = require('node:stream')
 
 test('should work as expected with a slow readable', t => {
   t.plan(3)

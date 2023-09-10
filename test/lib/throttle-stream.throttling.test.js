@@ -4,7 +4,7 @@ const { test } = require('tap')
 const { assertTimespan } = require('../utils/assert-timespan')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
-const { pipeline } = require('stream')
+const { pipeline } = require('node:stream')
 
 test('should take ~0 second to read 10,000 bytes at 10000bps', t => {
   t.plan(4)
