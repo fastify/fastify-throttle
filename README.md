@@ -20,7 +20,7 @@ import Fastify from 'fastify'
 
 const fastify = Fastify()
 await fastify.register(import('@fastify/throttle'), {
-  bytesPerSecond: 1024 * 1024 // 1MB/s
+  bytesPerSecond: 1024 * 1024, // 1MB/s
   streamPayloads: true, // throttle the payload if it is a stream
   bufferPayloads: true, // throttle the payload if it is a Buffer
   stringPayloads: true // throttle the payload if it is a string
