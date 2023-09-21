@@ -20,9 +20,9 @@ import Fastify from 'fastify'
 
 const fastify = Fastify()
 await fastify.register(import('@fastify/throttle'), {
-  bytesPerSecond: 1024 * 1024 // 1MB/s
-  streamPayloads: true // throttle the payload if it is a stream
-  bufferPayloads: true // throttle the payload if it is a Buffer
+  bytesPerSecond: 1024 * 1024, // 1MB/s
+  streamPayloads: true, // throttle the payload if it is a stream
+  bufferPayloads: true, // throttle the payload if it is a Buffer
   stringPayloads: true // throttle the payload if it is a string
 })
 
@@ -44,8 +44,8 @@ You can pass the following options during the plugin registration:
 ```js
 await fastify.register(import('@fastify/throttle'), {
   bytesPerSecond: 1000, // 1000 bytes per second
-  streamPayloads: true // throttle the payload if it is a stream
-  bufferPayloads: true // throttle the payload if it is a Buffer
+  streamPayloads: true, // throttle the payload if it is a stream
+  bufferPayloads: true, // throttle the payload if it is a Buffer
   stringPayloads: true // throttle the payload if it is a string
 })
 ```
