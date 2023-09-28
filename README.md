@@ -101,8 +101,10 @@ Example for setting the throttling per route:
 The `bytesPerSecond` option can be a number or a function. The function for `bytesPerSecond` has the following TypeScript definition: 
 
 ```typescript
-(elapsedTime: number, bytes: number) => number
+type BytesPerSecond = (request: FastifyRequest) => ((elapsedTime: number, bytes: number) => number) | Promise<((elapsedTime: number, bytes: number) => number)>
 ```
+
+`request` is the Fastify request object.
 
 `elapsedTime` is the time since the streaming started in seconds.
 `bytes` are the bytes already sent.
@@ -120,7 +122,7 @@ the `bytesPerSecond` like this:
   fastify.get('/', {
     config: {
       throttle: {
-        bytesPerSecond: function (elapsedTime, bytes) {
+        bytesPerSecond: (request) => function (elapsedTime, bytes) {
           if (elapsedTime < 2) {
             return 0
           } else {

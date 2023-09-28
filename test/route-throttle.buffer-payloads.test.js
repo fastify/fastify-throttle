@@ -70,3 +70,47 @@ test('should throttle Buffer payloads if bufferPayloads is set to true', async t
   assertTimespan(t, startTime, Date.now(), 2000)
   t.equal(response.body.length, 3000)
 })
+
+test('should throttle Buffer payloads if bufferPayloads is set to true and bytesPerSecond is a function', async t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  await fastify.register(fastifyThrottle)
+
+  fastify.get('/throttled', {
+    config: {
+      throttle: {
+        bytesPerSecond: (request) => (elapsedTime, bytes) => 1000,
+        bufferPayloads: true
+      }
+    }
+  }, (req, reply) => { reply.send(Buffer.alloc(3000)) })
+
+  const startTime = Date.now()
+
+  const response = await fastify.inject('/throttled')
+  assertTimespan(t, startTime, Date.now(), 2000)
+  t.equal(response.body.length, 3000)
+})
+
+test('should throttle Buffer payloads if bufferPayloads is set to true and bytesPerSecond is an async function', async t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  await fastify.register(fastifyThrottle)
+
+  fastify.get('/throttled', {
+    config: {
+      throttle: {
+        bytesPerSecond: async (request) => (elapsedTime, bytes) => 1000,
+        bufferPayloads: true
+      }
+    }
+  }, (req, reply) => { reply.send(Buffer.alloc(3000)) })
+
+  const startTime = Date.now()
+
+  const response = await fastify.inject('/throttled')
+  assertTimespan(t, startTime, Date.now(), 2000)
+  t.equal(response.body.length, 3000)
+})

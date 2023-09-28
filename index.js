@@ -36,32 +36,59 @@ async function addRouteThrottleHook (fastify, routeOptions, throttleOptions) {
 function throttleOnSendHandler (fastify, throttleOpts) {
   const bytesPerSecond = throttleOpts.bytesPerSecond
 
-  return function onSendHandler (request, reply, payload, done) {
-    if (throttleOpts.streamPayloads && payload instanceof Stream) {
-      done(null, pipeline(
-        payload,
-        new ThrottleStream({ bytesPerSecond }),
-        err => { fastify.log.error(err) }
-      ))
-      return
+  if (typeof bytesPerSecond === 'number') {
+    return function onSendHandler (request, reply, payload, done) {
+      if (throttleOpts.streamPayloads && payload instanceof Stream) {
+        done(null, pipeline(
+          payload,
+          new ThrottleStream({ bytesPerSecond }),
+          err => { fastify.log.error(err) }
+        ))
+        return
+      }
+      if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
+        done(null, pipeline(
+          Readable.from(payload),
+          new ThrottleStream({ bytesPerSecond }),
+          err => { fastify.log.error(err) }
+        ))
+        return
+      }
+      if (throttleOpts.stringPayloads && typeof payload === 'string') {
+        done(null, pipeline(
+          Readable.from(Buffer.from(payload)),
+          new ThrottleStream({ bytesPerSecond }),
+          err => { fastify.log.error(err) }
+        ))
+        return
+      }
+      done(null, payload)
     }
-    if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
-      done(null, pipeline(
-        Readable.from(payload),
-        new ThrottleStream({ bytesPerSecond }),
-        err => { fastify.log.error(err) }
-      ))
-      return
+  } else {
+    return async function onSendHandler (request, reply, payload) {
+      if (throttleOpts.streamPayloads && payload instanceof Stream) {
+        return pipeline(
+          payload,
+          new ThrottleStream({ bytesPerSecond: await bytesPerSecond(request) }),
+          err => { fastify.log.error(err) }
+        )
+      }
+      if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
+        return pipeline(
+          Readable.from(payload),
+          new ThrottleStream({ bytesPerSecond: await bytesPerSecond(request) }),
+          err => { fastify.log.error(err) }
+        )
+      }
+      if (throttleOpts.stringPayloads && typeof payload === 'string') {
+        return pipeline(
+          Readable.from(Buffer.from(payload)),
+          new ThrottleStream({ bytesPerSecond: await bytesPerSecond(request) }),
+          err => { fastify.log.error(err) }
+        )
+      }
+      return payload
     }
-    if (throttleOpts.stringPayloads && typeof payload === 'string') {
-      done(null, pipeline(
-        Readable.from(Buffer.from(payload)),
-        new ThrottleStream({ bytesPerSecond }),
-        err => { fastify.log.error(err) }
-      ))
-      return
-    }
-    done(null, payload)
   }
 }
 
