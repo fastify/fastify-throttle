@@ -1,2 +1,4 @@
 files:
   - test/**/*.test.js
+
+jobs: 1
