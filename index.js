@@ -2,15 +2,18 @@
 
 const fp = require('fastify-plugin')
 
+const { ThrottleStreamGroupFactory } = require('./lib/throttle-stream-group')
+const { MemoryStore } = require('./store/memory-store')
 const { ThrottleStream } = require('./lib/throttle-stream')
 const { Readable, Stream, pipeline } = require('stream')
 
-function fastifyThrottle (fastify, options, done) {
+function fastifyThrottle(fastify, options, done) {
   options = Object.assign({}, options)
 
   options.streamPayloads = options.streamPayloads ?? true
   options.bufferPayloads = options.bufferPayloads || false
   options.stringPayloads = options.stringPayloads || false
+  options.store = new MemoryStore()
 
   fastify.addHook('onRoute', (routeOptions) => {
     const opts = Object.assign({}, options, routeOptions.config?.throttle)
@@ -21,7 +24,7 @@ function fastifyThrottle (fastify, options, done) {
   done()
 }
 
-async function addRouteThrottleHook (fastify, routeOptions, throttleOptions) {
+async function addRouteThrottleHook(fastify, routeOptions, throttleOptions) {
   const hook = 'onSend'
   const hookHandler = throttleOnSendHandler(fastify, throttleOptions)
   if (Array.isArray(routeOptions[hook])) {
@@ -33,14 +36,14 @@ async function addRouteThrottleHook (fastify, routeOptions, throttleOptions) {
   }
 }
 
-function throttleOnSendHandler (fastify, throttleOpts) {
+function throttleOnSendHandler(fastify, throttleOpts) {
   const bytesPerSecond = throttleOpts.bytesPerSecond
 
-  return function onSendHandler (request, reply, payload, done) {
+  return function onSendHandler(request, reply, payload, done) {
     if (throttleOpts.streamPayloads && payload instanceof Stream) {
       done(null, pipeline(
         payload,
-        new ThrottleStream({ bytesPerSecond }),
+        ThrottleStreamGroupFactory({ bytesPerSecond , store: throttleOpts.store}),
         err => { fastify.log.error(err) }
       ))
       return
@@ -48,7 +51,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
     if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
       done(null, pipeline(
         Readable.from(payload),
-        new ThrottleStream({ bytesPerSecond }),
+        ThrottleStreamGroupFactory({ bytesPerSecond , store: throttleOpts.store}),
         err => { fastify.log.error(err) }
       ))
       return
@@ -56,7 +59,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
     if (throttleOpts.stringPayloads && typeof payload === 'string') {
       done(null, pipeline(
         Readable.from(Buffer.from(payload)),
-        new ThrottleStream({ bytesPerSecond }),
+        ThrottleStreamGroupFactory({ bytesPerSecond }),
         err => { fastify.log.error(err) }
       ))
       return

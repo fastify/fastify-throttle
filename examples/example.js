@@ -27,20 +27,8 @@ async function main () {
     reply.send(new RandomStream(30000))
   })
 
-  fastify.get('/delayed', {
-    config: {
-      throttle: {
-        bytesPerSecond: function (elapsedTime, bytes) {
-          if (elapsedTime < 2) {
-            return 0
-          } else {
-            return Infinity
-          }
-        }
-      }
-    }
-  }, (req, reply) => {
-    reply.send(createReadStream(resolve(__dirname, __filename)))
+  fastify.get('/delayed', (req, reply) => {
+    reply.send(createReadStream(resolve(__dirname, './output.file')))
   })
 
   fastify.get('/pojo', (req, reply) => {
