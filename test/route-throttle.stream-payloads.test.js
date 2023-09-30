@@ -94,6 +94,29 @@ test('should throttle streams payloads if streamPayloads is set to true and byte
   t.equal(response.body.length, 3000)
 })
 
+test('should throttle streams payloads if streamPayloads is set to true and bytesPerSecond is an sync function and async is set to true', async t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  await fastify.register(fastifyThrottle)
+
+  fastify.get('/throttled', {
+    config: {
+      throttle: {
+        bytesPerSecond: (request) => Promise.resolve((elapsedTime, bytes) => 1000),
+        async: true,
+        streamPayloads: true
+      }
+    }
+  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+
+  const startTime = Date.now()
+
+  const response = await fastify.inject('/throttled')
+  assertTimespan(t, startTime, Date.now(), 2000)
+  t.equal(response.body.length, 3000)
+})
+
 test('should not throttle streams payloads if streamPayloads is set to false', async t => {
   t.plan(2)
   const fastify = Fastify()
@@ -136,4 +159,46 @@ test('should not throttle streams payloads if streamPayloads is set to false', a
   const response = await fastify.inject('/')
   assertTimespan(t, startTime, Date.now(), 50, 100)
   t.equal(response.body.length, 3000)
+})
+
+test('should not throttle streams payloads if streamPayloads is set to false and bytesPerSecond is a function returning a Promise', async t => {
+  t.plan(2)
+  const fastify = Fastify()
+
+  await fastify.register(fastifyThrottle)
+
+  fastify.get('/throttled', {
+    config: {
+      throttle: {
+        bytesPerSecond: (request) => Promise.resolve((elapsedTime, bytes) => 1000),
+        streamPayloads: false,
+        async: true
+      }
+    }
+  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+
+  const startTime = Date.now()
+
+  const response = await fastify.inject('/throttled')
+  assertTimespan(t, startTime, Date.now(), 50, 100)
+  t.equal(response.body.length, 3000)
+})
+
+test('should not crash if async is set to true and bytesPerSecond is an sync function returning a rejected Promise', async t => {
+  t.plan(1)
+  const fastify = Fastify()
+
+  await fastify.register(fastifyThrottle)
+
+  fastify.get('/throttled', {
+    config: {
+      throttle: {
+        bytesPerSecond: (request) => Promise.reject(new Error('Arbitrary Error')),
+        async: true
+      }
+    }
+  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+
+  const response = await fastify.inject('/throttled')
+  t.equal(response.statusCode, 500)
 })

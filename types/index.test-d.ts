@@ -32,6 +32,18 @@ server.register(fastifyThrottle, {
   }
 })
 
+server.register(fastifyThrottle, {
+  async: true,
+  bytesPerSecond: (_req) => {
+    expectType<FastifyRequest>(_req)
+    return Promise.resolve((elapsedTime, bytes) => {
+      expectType<number>(elapsedTime)
+      expectType<number>(bytes)
+      return 200
+    })
+  }
+})
+
 server.get('/', {
   config: {
     throttle: {

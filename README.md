@@ -55,10 +55,11 @@ The throttle options per route are the same as the plugin options.
 
 | Header | Description | Default |
 |--------|-------------|---------|
-|`bytesPerSecond` | The allowed bytes per second, number or a function | 16384 |
-|`streamPayloads` | Throttle the payload if it is a stream | true |
-|`bufferPayloads` | Throttle the payload if it is a Buffer | false |
-|`stringPayloads` | Throttle the payload if it is a string | false |
+| `bytesPerSecond` | The allowed bytes per second, number or a function | 16384 |
+| `streamPayloads` | Throttle the payload if it is a stream | true |
+| `bufferPayloads` | Throttle the payload if it is a Buffer | false |
+| `stringPayloads` | Throttle the payload if it is a string | false |
+| `async` | Set to true if bytesPerSecond is a function returning a Promise | false |
 
 Example for setting throttling globally:
 
@@ -122,12 +123,41 @@ the `bytesPerSecond` like this:
   fastify.get('/', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => function (elapsedTime, bytes) {
-          if (elapsedTime < 2) {
-            return 0
-          } else {
-            return Infinity
+        bytesPerSecond: function bytesPerSecondfactory(request) {
+          // this function runs for every request
+          const client = request.headers['customer-id']
+          
+          return function (elapsedTime, bytes) {
+            return CONFIG[client] * 2 // return a number of xyz
           }
+        }
+      }
+    }
+  }, (req, reply) => {
+    reply.send(createReadStream(resolve(__dirname, __filename)))
+  })
+
+  fastify.listen({ port: 3000 })
+```
+
+The `bytesPerSecond` function can be a sync function or an async function. If you provide an async function then it will be detected by the plugin. If it is a sync function returning a Promise, you must set the `async` option to `true`, so that the plugin knows that it should await the Promise.
+
+```js
+  const fastify = require('fastify')()
+
+  await fastify.register(import('@fastify/throttle'))
+
+  fastify.get('/', {
+    config: {
+      throttle: {
+        async: true,
+        bytesPerSecond: function bytesPerSecondfactory(request) {
+          // this function runs for every request
+          const client = request.headers['customer-id']
+          
+          return Promise.resolve(function (elapsedTime, bytes) {
+            return CONFIG[client] * 2 // return a number of xyz
+          })
         }
       }
     }

@@ -64,6 +64,13 @@ declare namespace fastifyThrottle {
      * @default false
      */
     stringPayloads?: boolean
+
+    /**
+     * The bytesPerSecond function is a sync function returning a Promise.
+     * @type {boolean}
+     * @default false
+     */
+    async?: boolean;
   }
 
   export interface FastifyThrottlePluginOptions extends FastifyThrottleOptions {
