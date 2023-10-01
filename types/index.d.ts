@@ -1,5 +1,5 @@
 import {
-  FastifyPluginCallback,
+  FastifyPluginCallback, FastifyRequest,
 } from 'fastify';
 
 declare module 'fastify' {
@@ -20,6 +20,11 @@ type FastifyThrottle = FastifyPluginCallback<fastifyThrottle.FastifyThrottleOpti
 type BytesPerSecondFn = (elapsedTime: number, bytes: number) => number
 
 /**
+ * Represents a function that generates a BytesPerSecondFn.
+ */
+type BytesPerSecondGenerator = (request: FastifyRequest) => BytesPerSecondFn | Promise<BytesPerSecondFn>
+
+/**
  * Namespace for fastify-throttle plugin options.
  *
  * @namespace fastifyThrottle
@@ -37,7 +42,7 @@ declare namespace fastifyThrottle {
      * @type {number|BytesPerSecondFn}
      * @default 16384
      */
-    bytesPerSecond: number | BytesPerSecondFn
+    bytesPerSecond: number | BytesPerSecondGenerator
 
     /**
      * Throttle stream payloads.
@@ -59,6 +64,13 @@ declare namespace fastifyThrottle {
      * @default false
      */
     stringPayloads?: boolean
+
+    /**
+     * The bytesPerSecond function is a sync function returning a Promise.
+     * @type {boolean}
+     * @default false
+     */
+    async?: boolean;
   }
 
   export interface FastifyThrottlePluginOptions extends FastifyThrottleOptions {

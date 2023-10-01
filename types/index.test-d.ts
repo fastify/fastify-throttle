@@ -1,4 +1,4 @@
-import fastify from 'fastify'
+import fastify, { FastifyRequest } from 'fastify'
 import fastifyThrottle from '..'
 import { expectType } from 'tsd';
 
@@ -11,10 +11,36 @@ server.register(fastifyThrottle, {
   stringPayloads: false
 })
 server.register(fastifyThrottle, {
-  bytesPerSecond: (elapsedTime, bytes) => {
-    expectType<number>(elapsedTime)
-    expectType<number>(bytes)
-    return 200
+  bytesPerSecond: (_req) => {
+    expectType<FastifyRequest>(_req)
+    return (elapsedTime, bytes) => {
+      expectType<number>(elapsedTime)
+      expectType<number>(bytes)
+      return 200
+    }
+  }
+})
+
+server.register(fastifyThrottle, {
+  bytesPerSecond: async (_req) => {
+    expectType<FastifyRequest>(_req)
+    return (elapsedTime, bytes) => {
+      expectType<number>(elapsedTime)
+      expectType<number>(bytes)
+      return 200
+    }
+  }
+})
+
+server.register(fastifyThrottle, {
+  async: true,
+  bytesPerSecond: (_req) => {
+    expectType<FastifyRequest>(_req)
+    return Promise.resolve((elapsedTime, bytes) => {
+      expectType<number>(elapsedTime)
+      expectType<number>(bytes)
+      return 200
+    })
   }
 })
 
