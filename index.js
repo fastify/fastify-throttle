@@ -39,7 +39,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
   const bytesPerSecond = throttleOpts.bytesPerSecond
 
   if (typeof bytesPerSecond === 'number') {
-    return async function onSendHandler (request, reply, payload, done) {
+    return async function onSendHandler (request, reply, payload) {
       if (throttleOpts.streamPayloads && payload instanceof Stream) {
         return pipeline(
           payload,
