@@ -20,7 +20,7 @@ class ErrorStream extends Readable {
   }
 
   _read () {
-    throw new Error(this.#message)
+    this.emit('error', new Error(this.#message))
   }
 }
 
