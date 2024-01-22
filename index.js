@@ -37,6 +37,7 @@ async function addRouteThrottleHook (fastify, routeOptions, throttleOptions) {
 
 function throttleOnSendHandler (fastify, throttleOpts) {
   const bytesPerSecond = throttleOpts.bytesPerSecond
+  const pipelineErrorCallback = err => { if (err) fastify.log.error(err) }
 
   if (typeof bytesPerSecond === 'number') {
     return async function onSendHandler (request, reply, payload) {
@@ -44,21 +45,21 @@ function throttleOnSendHandler (fastify, throttleOpts) {
         return pipeline(
           payload,
           new ThrottleStream({ bytesPerSecond }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
         return pipeline(
           Readable.from(payload),
           new ThrottleStream({ bytesPerSecond }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       if (throttleOpts.stringPayloads && typeof payload === 'string') {
         return pipeline(
           Readable.from(Buffer.from(payload)),
           new ThrottleStream({ bytesPerSecond }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       return payload
@@ -69,21 +70,21 @@ function throttleOnSendHandler (fastify, throttleOpts) {
         return pipeline(
           payload,
           new ThrottleStream({ bytesPerSecond: await bytesPerSecond(request) }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
         return pipeline(
           Readable.from(payload),
           new ThrottleStream({ bytesPerSecond: await bytesPerSecond(request) }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       if (throttleOpts.stringPayloads && typeof payload === 'string') {
         return pipeline(
           Readable.from(Buffer.from(payload)),
           new ThrottleStream({ bytesPerSecond: await bytesPerSecond(request) }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       return payload
@@ -94,21 +95,21 @@ function throttleOnSendHandler (fastify, throttleOpts) {
         return pipeline(
           payload,
           new ThrottleStream({ bytesPerSecond: bytesPerSecond(request) }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       if (throttleOpts.bufferPayloads && Buffer.isBuffer(payload)) {
         return pipeline(
           Readable.from(payload),
           new ThrottleStream({ bytesPerSecond: bytesPerSecond(request) }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       if (throttleOpts.stringPayloads && typeof payload === 'string') {
         return pipeline(
           Readable.from(Buffer.from(payload)),
           new ThrottleStream({ bytesPerSecond: bytesPerSecond(request) }),
-          err => { fastify.log.error(err) }
+          pipelineErrorCallback
         )
       }
       return payload
