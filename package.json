@@ -30,14 +30,14 @@
   },
   "homepage": "https://github.com/fastify/fastify-throttle#readme",
   "devDependencies": {
-    "@fastify/pre-commit": "^2.0.2",
-    "fastify": "^4.21.0",
+    "@fastify/pre-commit": "^2.1.0",
+    "fastify": "^4.28.1",
     "standard": "^17.1.0",
-    "tap": "^16.3.8",
-    "tsd": "^0.31.0"
+    "tap": "^20.0.3",
+    "tsd": "^0.31.1"
   },
   "dependencies": {
-    "fastify-plugin": "^4.0.0"
+    "fastify-plugin": "^4.5.1"
   },
   "publishConfig": {
     "access": "public"
