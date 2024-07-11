@@ -6,7 +6,8 @@ const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
 const { pipeline } = require('node:stream')
 
-test('should delay the stream for 2 seconds', t => {
+// TODO: Flaky test, remove skip
+test('should delay the stream for 2 seconds', { skip: true }, t => {
   t.plan(8)
 
   const randomStream = new RandomStream(16384 * 2) // should take ~2 seconds

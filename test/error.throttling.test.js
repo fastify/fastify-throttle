@@ -12,7 +12,7 @@ const { CustomLogger } = require('./utils/logger')
 test('stream (no error)', async t => {
   t.plan(1)
   const fastify = Fastify({
-    logger: new CustomLogger((err) => {
+    loggerInstance: new CustomLogger((err) => {
       t.error(err)
     })
   })
@@ -36,7 +36,7 @@ test('stream (error)', async t => {
   t.plan(4)
   const message = 'failed stream'
   const fastify = Fastify({
-    logger: new CustomLogger({
+    loggerInstance: new CustomLogger({
       error: (data) => {
         // This function gets called twice
         // Once by fastify and once by the failed pipeline
