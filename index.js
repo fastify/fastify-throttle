@@ -118,7 +118,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
 }
 
 module.exports = fp(fastifyThrottle, {
-  fastify: '4.x',
+  fastify: '5.x',
   name: '@fastify/throttle'
 })
 module.exports.default = fastifyThrottle
