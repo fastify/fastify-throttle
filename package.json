@@ -1,6 +1,6 @@
 {
   "name": "@fastify/throttle",
-  "version": "3.0.0-pre.fv5.1",
+  "version": "3.0.0-pre.fv5.2",
   "description": "Throttle responses in fastify",
   "main": "index.js",
   "type": "commonjs",
