@@ -99,7 +99,7 @@ Example for setting the throttling per route:
   fastify.listen({ port: 3000 })
 ```
 
-The `bytesPerSecond` option can be a number or a function. The function for `bytesPerSecond` has the following TypeScript definition: 
+The `bytesPerSecond` option can be a number or a function. The function for `bytesPerSecond` has the following TypeScript definition:
 
 ```typescript
 type BytesPerSecond = (request: FastifyRequest) => ((elapsedTime: number, bytes: number) => number) | Promise<((elapsedTime: number, bytes: number) => number)>
@@ -126,7 +126,7 @@ the `bytesPerSecond` like this:
         bytesPerSecond: function bytesPerSecondfactory(request) {
           // this function runs for every request
           const client = request.headers['customer-id']
-          
+
           return function (elapsedTime, bytes) {
             return CONFIG[client] * 2 // return a number of xyz
           }
@@ -154,7 +154,7 @@ The `bytesPerSecond` function can be a sync function or an async function. If yo
         bytesPerSecond: function bytesPerSecondfactory(request) {
           // this function runs for every request
           const client = request.headers['customer-id']
-          
+
           return Promise.resolve(function (elapsedTime, bytes) {
             return CONFIG[client] * 2 // return a number of xyz
           })
