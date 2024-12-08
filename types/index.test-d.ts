@@ -1,6 +1,6 @@
 import fastify, { FastifyRequest } from 'fastify'
 import fastifyThrottle from '..'
-import { expectType } from 'tsd';
+import { expectType } from 'tsd'
 
 const server = fastify()
 

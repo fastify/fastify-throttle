@@ -1,6 +1,6 @@
 import {
   FastifyPluginCallback, FastifyRequest,
-} from 'fastify';
+} from 'fastify'
 
 declare module 'fastify' {
   interface FastifyContextConfig {
@@ -8,7 +8,7 @@ declare module 'fastify' {
   }
 }
 
-type FastifyThrottle = FastifyPluginCallback<fastifyThrottle.FastifyThrottleOptions>;
+type FastifyThrottle = FastifyPluginCallback<fastifyThrottle.FastifyThrottleOptions>
 
 /**
  * Represents a function that calculates the rate of bytes per second.
@@ -79,5 +79,5 @@ declare namespace fastifyThrottle {
   export { fastifyThrottle as default }
 }
 
-declare function fastifyThrottle(...params: Parameters<FastifyThrottle>): ReturnType<FastifyThrottle>
+declare function fastifyThrottle (...params: Parameters<FastifyThrottle>): ReturnType<FastifyThrottle>
 export = fastifyThrottle
