@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/fastify/fastify-throttle/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fastify-throttle/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/@fastify/throttle.svg?style=flat)](https://www.npmjs.com/package/@fastify/throttle)
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
+[![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
 Throttle the download speed of a request.
 
