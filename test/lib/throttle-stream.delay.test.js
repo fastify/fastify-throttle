@@ -12,7 +12,7 @@ test('should delay the stream for 2 seconds', { skip: true }, t => {
 
   const randomStream = new RandomStream(16384 * 2) // should take ~2 seconds
   const throttleStream = new ThrottleStream({
-    bytesPerSecond: function (elapsedTime, bytes) {
+    bytesPerSecond: function (elapsedTime) {
       if (elapsedTime < 2) {
         return 0
       } else {

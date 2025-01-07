@@ -15,7 +15,7 @@ test('should throttle globally', async t => {
     bytesPerSecond: 1000
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(3000)) })
+  fastify.get('/throttled', (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -31,7 +31,7 @@ test('should throttle globally and set the bytesPerSecond', async t => {
     bytesPerSecond: 10000
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(30000)) })
+  fastify.get('/throttled', (_req, reply) => { reply.send(new RandomStream(30000)) })
 
   const startTime = Date.now()
 
@@ -47,13 +47,13 @@ test('should throttle globally and set the bytesPerSecond function', async t => 
     bytesPerSecond: (request) => {
       t.equal(request.headers['x-throttle-speed'], '10000')
       const bps = parseInt(request.headers['x-throttle-speed'], 10)
-      return (elapsedTime, bytes) => {
+      return () => {
         return bps
       }
     }
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(30000)) })
+  fastify.get('/throttled', (_req, reply) => { reply.send(new RandomStream(30000)) })
 
   const startTime = Date.now()
 
@@ -74,13 +74,13 @@ test('should throttle globally and set the bytesPerSecond async function', async
     bytesPerSecond: async (request) => {
       t.equal(request.headers['x-throttle-speed'], '10000')
       const bps = parseInt(request.headers['x-throttle-speed'], 10)
-      return (elapsedTime, bytes) => {
+      return () => {
         return bps
       }
     }
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(30000)) })
+  fastify.get('/throttled', (_req, reply) => { reply.send(new RandomStream(30000)) })
 
   const startTime = Date.now()
 

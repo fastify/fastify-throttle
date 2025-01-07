@@ -18,7 +18,7 @@ test('should not throttle string payloads by default', async t => {
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(1000).toString()) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(1000).toString()) })
 
   const startTime = Date.now()
 
@@ -40,7 +40,7 @@ test('should not throttle strings payloads if stringPayloads is set to false', a
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(1000).toString()) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(1000).toString()) })
 
   const startTime = Date.now()
 
@@ -62,7 +62,7 @@ test('should throttle string payloads when stringPayloads is true', async t => {
         stringPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(3000).toString()) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(3000).toString()) })
 
   const startTime = Date.now()
 
@@ -80,11 +80,11 @@ test('should throttle string payloads when stringPayloads is true and bytesPerSe
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => (elapsedTime, bytes) => 1000,
+        bytesPerSecond: () => () => 1000,
         stringPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(3000).toString()) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(3000).toString()) })
 
   const startTime = Date.now()
 
@@ -102,11 +102,11 @@ test('should throttle string payloads when stringPayloads is true and bytesPerSe
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: async (request) => (elapsedTime, bytes) => 1000,
+        bytesPerSecond: async () => () => 1000,
         stringPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(3000).toString()) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(3000).toString()) })
 
   const startTime = Date.now()
 

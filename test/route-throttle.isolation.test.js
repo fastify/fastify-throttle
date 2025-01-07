@@ -19,9 +19,9 @@ test('should throttle per route but not effect other routes', async t => {
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
-  fastify.get('/unthrottled', (req, reply) => { reply.send(new RandomStream(3000)) })
+  fastify.get('/unthrottled', (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 

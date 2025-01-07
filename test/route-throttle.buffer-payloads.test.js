@@ -18,7 +18,7 @@ test('should not throttle Buffer payloads if bufferPayloads is not set', async t
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(1000)) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(1000)) })
 
   const startTime = Date.now()
 
@@ -40,7 +40,7 @@ test('should not throttle Buffer payloads if bufferPayloads is set to false', as
         bufferPayloads: false
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(1000)) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(1000)) })
 
   const startTime = Date.now()
 
@@ -62,7 +62,7 @@ test('should throttle Buffer payloads if bufferPayloads is set to true', async t
         bufferPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(3000)) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(3000)) })
 
   const startTime = Date.now()
 
@@ -80,11 +80,11 @@ test('should throttle Buffer payloads if bufferPayloads is set to true and bytes
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => (elapsedTime, bytes) => 1000,
+        bytesPerSecond: () => () => 1000,
         bufferPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(3000)) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(3000)) })
 
   const startTime = Date.now()
 
@@ -102,11 +102,11 @@ test('should throttle Buffer payloads if bufferPayloads is set to true and bytes
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: async (request) => (elapsedTime, bytes) => 1000,
+        bytesPerSecond: async () => () => 1000,
         bufferPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(Buffer.alloc(3000)) })
+  }, (_req, reply) => { reply.send(Buffer.alloc(3000)) })
 
   const startTime = Date.now()
 

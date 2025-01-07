@@ -21,7 +21,7 @@ test('stream (no error)', async t => {
     bytesPerSecond: 1000
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(new RandomStream(3000)) })
+  fastify.get('/throttled', (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -52,7 +52,7 @@ test('stream (error)', async t => {
     bytesPerSecond: 1000
   })
 
-  fastify.get('/throttled', (req, reply) => { reply.send(new ErrorStream(message)) })
+  fastify.get('/throttled', (_req, reply) => { reply.send(new ErrorStream(message)) })
 
   await fastify.inject({
     url: '/throttled'
