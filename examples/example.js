@@ -15,22 +15,22 @@ async function main () {
     bufferPayloads: true
   })
 
-  fastify.get('/string', (req, reply) => {
+  fastify.get('/string', (_req, reply) => {
     reply.send(Buffer.allocUnsafe(1024 * 1024).toString('ascii'))
   })
 
-  fastify.get('/buffer', (req, reply) => {
+  fastify.get('/buffer', (_req, reply) => {
     reply.send(Buffer.allocUnsafe(1024 * 1024))
   })
 
-  fastify.get('/stream', (req, reply) => {
+  fastify.get('/stream', (_req, reply) => {
     reply.send(new RandomStream(30000))
   })
 
   fastify.get('/delayed', {
     config: {
       throttle: {
-        bytesPerSecond: function (elapsedTime, bytes) {
+        bytesPerSecond: function (elapsedTime, _bytes) {
           if (elapsedTime < 2) {
             return 0
           } else {
@@ -39,12 +39,12 @@ async function main () {
         }
       }
     }
-  }, (req, reply) => {
+  }, (_req, reply) => {
     reply.send(createReadStream(resolve(__dirname, __filename)))
   })
 
-  fastify.get('/pojo', (req, reply) => {
-    const payload = Array(10000).fill(0).map(v => (Math.random() * 1e6).toString(36))
+  fastify.get('/pojo', (_req, reply) => {
+    const payload = Array(10000).fill(0).map(() => (Math.random() * 1e6).toString(36))
     reply.send({ payload })
   })
 

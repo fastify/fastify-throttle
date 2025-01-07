@@ -19,7 +19,7 @@ test('should throttle per route', async t => {
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -39,7 +39,7 @@ test('should throttle per route and set the bytesPerSecond', async t => {
         bytesPerSecond: 10000
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(30000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(30000)) })
 
   const startTime = Date.now()
 
@@ -59,13 +59,13 @@ test('should throttle per route and set the bytesPerSecond as function', async t
         bytesPerSecond: (request) => {
           t.equal(request.headers['x-throttle-speed'], '10000')
           const bps = parseInt(request.headers['x-throttle-speed'], 10)
-          return (elapsedTime, bytes) => {
+          return () => {
             return bps
           }
         }
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(30000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(30000)) })
 
   const startTime = Date.now()
 
@@ -90,13 +90,13 @@ test('should throttle per route and set the bytesPerSecond as async function', a
         bytesPerSecond: async (request) => {
           t.equal(request.headers['x-throttle-speed'], '10000')
           const bps = parseInt(request.headers['x-throttle-speed'], 10)
-          return (elapsedTime, bytes) => {
+          return () => {
             return bps
           }
         }
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(30000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(30000)) })
 
   const startTime = Date.now()
 

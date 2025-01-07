@@ -27,7 +27,7 @@ test('_init is resilient against errors', t => {
 test('intervalHandler is resilient against errors', t => {
   t.plan(3)
 
-  const bytesPerSecondFn = function (elapsedTime, bytes) {
+  const bytesPerSecondFn = function (elapsedTime) {
     if (elapsedTime === 0) {
       return 1000
     } else {

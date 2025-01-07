@@ -14,7 +14,7 @@ class RandomStream extends Readable {
 
   _read (bytes, callback) {
     if (typeof callback !== 'function') {
-      callback = function (e, b) {
+      callback = function (_e, b) {
         this.push(b)
       }.bind(this)
     }

@@ -19,7 +19,7 @@ test('should throttle streams payloads by default', async t => {
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -41,7 +41,7 @@ test('should throttle streams payloads if streamPayloads is set to true', async 
         streamPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -59,11 +59,11 @@ test('should throttle streams payloads if streamPayloads is set to true and byte
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => (elapsedTime, bytes) => 1000,
+        bytesPerSecond: () => () => 1000,
         streamPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -81,11 +81,11 @@ test('should throttle streams payloads if streamPayloads is set to true and byte
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: async (request) => (elapsedTime, bytes) => 1000,
+        bytesPerSecond: async () => () => 1000,
         streamPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -103,12 +103,12 @@ test('should throttle streams payloads if streamPayloads is set to true and byte
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => Promise.resolve((elapsedTime, bytes) => 1000),
+        bytesPerSecond: () => Promise.resolve(() => 1000),
         async: true,
         streamPayloads: true
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -130,7 +130,7 @@ test('should not throttle streams payloads if streamPayloads is set to false', a
         streamPayloads: false
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -148,11 +148,11 @@ test('should not throttle streams payloads if streamPayloads is set to false', a
   fastify.get('/', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => (elapsedTime, bytes) => 1000,
+        bytesPerSecond: () => () => 1000,
         streamPayloads: false
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -170,12 +170,12 @@ test('should not throttle streams payloads if streamPayloads is set to false and
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => Promise.resolve((elapsedTime, bytes) => 1000),
+        bytesPerSecond: () => Promise.resolve(() => 1000),
         streamPayloads: false,
         async: true
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -193,11 +193,11 @@ test('should not crash if async is set to true and bytesPerSecond is an sync fun
   fastify.get('/throttled', {
     config: {
       throttle: {
-        bytesPerSecond: (request) => Promise.reject(new Error('Arbitrary Error')),
+        bytesPerSecond: () => Promise.reject(new Error('Arbitrary Error')),
         async: true
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const response = await fastify.inject('/throttled')
   t.equal(response.statusCode, 500)

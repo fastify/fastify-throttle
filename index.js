@@ -40,7 +40,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
   const pipelineCallback = err => err && fastify.log.error(err)
 
   if (typeof bytesPerSecond === 'number') {
-    return async function onSendHandler (request, reply, payload) {
+    return async function onSendHandler (_request, _reply, payload) {
       if (throttleOpts.streamPayloads && payload instanceof Stream) {
         return pipeline(
           payload,
@@ -65,7 +65,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
       return payload
     }
   } else if (throttleOpts.async || isAsyncFunction(bytesPerSecond)) {
-    return async function onSendHandler (request, reply, payload) {
+    return async function onSendHandler (request, _reply, payload) {
       if (throttleOpts.streamPayloads && payload instanceof Stream) {
         return pipeline(
           payload,
@@ -90,7 +90,7 @@ function throttleOnSendHandler (fastify, throttleOpts) {
       return payload
     }
   } else {
-    return async function onSendHandler (request, reply, payload) {
+    return async function onSendHandler (request, _reply, payload) {
       if (throttleOpts.streamPayloads && payload instanceof Stream) {
         return pipeline(
           payload,

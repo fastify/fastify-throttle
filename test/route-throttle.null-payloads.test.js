@@ -13,7 +13,7 @@ test('should not error when sending null', async t => {
   await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
-    onSend: [(request, reply, payload, done) => {
+    onSend: [(_request, _reply, _payload, done) => {
       t.ok(true)
       done(null, null)
     }],
@@ -22,7 +22,7 @@ test('should not error when sending null', async t => {
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(null) })
+  }, (_req, reply) => { reply.send(null) })
 
   const startTime = Date.now()
 

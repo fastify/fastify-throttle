@@ -14,7 +14,7 @@ test('should work with onSend-hook assigned as route config', async t => {
   await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
-    onSend: (request, reply, payload, done) => {
+    onSend: (_request, _reply, payload, done) => {
       t.ok(true)
       done(null, payload)
     },
@@ -23,7 +23,7 @@ test('should work with onSend-hook assigned as route config', async t => {
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 
@@ -39,7 +39,7 @@ test('should work with onSend-hook-Array assigned as route config', async t => {
   await fastify.register(fastifyThrottle)
 
   fastify.get('/throttled', {
-    onSend: [(request, reply, payload, done) => {
+    onSend: [(_request, _reply, payload, done) => {
       t.ok(true)
       done(null, payload)
     }],
@@ -48,7 +48,7 @@ test('should work with onSend-hook-Array assigned as route config', async t => {
         bytesPerSecond: 1000
       }
     }
-  }, (req, reply) => { reply.send(new RandomStream(3000)) })
+  }, (_req, reply) => { reply.send(new RandomStream(3000)) })
 
   const startTime = Date.now()
 

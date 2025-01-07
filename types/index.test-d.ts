@@ -53,4 +53,4 @@ server.get('/', {
       stringPayloads: false
     }
   }
-}, (request, reply) => { })
+}, () => { })

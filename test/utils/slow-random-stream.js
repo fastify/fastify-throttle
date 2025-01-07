@@ -15,7 +15,7 @@ class SlowRandomStream extends Readable {
   }
 
   _read (bytes, callback) {
-    if (typeof callback !== 'function') callback = function (e, b) { this.push(b) }.bind(this)
+    if (typeof callback !== 'function') callback = function (_e, b) { this.push(b) }.bind(this)
     bytes = 1
     this.remaining -= bytes
     if (this.remaining >= 0) {
