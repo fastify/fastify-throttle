@@ -1,6 +1,6 @@
 # @fastify/throttle
 
-[![CI](https://github.com/fastify/fastify-throttle/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/fastify/fastify-throttle/actions/workflows/ci.yml)
+[![CI](https://github.com/fastify/fastify-throttle/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fastify/fastify-throttle/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/@fastify/throttle.svg?style=flat)](https://www.npmjs.com/package/@fastify/throttle)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
@@ -170,4 +170,4 @@ The `bytesPerSecond` function can be a sync function or an async function. If yo
 
 <a name="license"></a>
 ## License
-**[MIT](https://github.com/fastify/fastify-throttle/blob/master/LICENSE)**
+**[MIT](https://github.com/fastify/fastify-throttle/blob/main/LICENSE)**
