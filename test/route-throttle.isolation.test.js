@@ -1,7 +1,6 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const { fastifyThrottle } = require('../index')
 const { assertTimespan } = require('./utils/assert-timespan')

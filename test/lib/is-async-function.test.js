@@ -1,14 +1,14 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const { isAsyncFunction } = require('../../lib/is-async-function.js')
 
 test('isAsyncFunction returns true for async functions', (t) => {
   t.plan(1)
-  t.ok(isAsyncFunction(async () => { }))
+  t.assert.ok(isAsyncFunction(async () => { }))
 })
 
 test('isAsyncFunction returns false for non-async functions', (t) => {
   t.plan(1)
-  t.notOk(isAsyncFunction(() => { }))
+  t.assert.ok(!isAsyncFunction(() => { }))
 })

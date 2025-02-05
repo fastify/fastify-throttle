@@ -1,7 +1,6 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const { fastifyThrottle } = require('../index')
 const { assertTimespan } = require('./utils/assert-timespan')
@@ -15,7 +14,7 @@ test('should work with onSend-hook assigned as route config', async t => {
 
   fastify.get('/throttled', {
     onSend: (_request, _reply, payload, done) => {
-      t.ok(true)
+      t.assert.ok(true)
       done(null, payload)
     },
     config: {
@@ -29,7 +28,7 @@ test('should work with onSend-hook assigned as route config', async t => {
 
   const response = await fastify.inject('/throttled')
   assertTimespan(t, startTime, Date.now(), 2000)
-  t.equal(response.body.length, 3000)
+  t.assert.deepStrictEqual(response.body.length, 3000)
 })
 
 test('should work with onSend-hook-Array assigned as route config', async t => {
@@ -40,7 +39,7 @@ test('should work with onSend-hook-Array assigned as route config', async t => {
 
   fastify.get('/throttled', {
     onSend: [(_request, _reply, payload, done) => {
-      t.ok(true)
+      t.assert.ok(true)
       done(null, payload)
     }],
     config: {
@@ -54,5 +53,5 @@ test('should work with onSend-hook-Array assigned as route config', async t => {
 
   const response = await fastify.inject('/throttled')
   assertTimespan(t, startTime, Date.now(), 2000)
-  t.equal(response.body.length, 3000)
+  t.assert.deepStrictEqual(response.body.length, 3000)
 })

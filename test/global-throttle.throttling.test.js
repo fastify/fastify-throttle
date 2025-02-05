@@ -1,7 +1,6 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const { fastifyThrottle } = require('../index')
 const { assertTimespan } = require('./utils/assert-timespan')
@@ -45,7 +44,7 @@ test('should throttle globally and set the bytesPerSecond function', async t => 
 
   await fastify.register(fastifyThrottle, {
     bytesPerSecond: (request) => {
-      t.equal(request.headers['x-throttle-speed'], '10000')
+      t.assert.deepStrictEqual(request.headers['x-throttle-speed'], '10000')
       const bps = parseInt(request.headers['x-throttle-speed'], 10)
       return () => {
         return bps
@@ -72,7 +71,7 @@ test('should throttle globally and set the bytesPerSecond async function', async
 
   await fastify.register(fastifyThrottle, {
     bytesPerSecond: async (request) => {
-      t.equal(request.headers['x-throttle-speed'], '10000')
+      t.assert.deepStrictEqual(request.headers['x-throttle-speed'], '10000')
       const bps = parseInt(request.headers['x-throttle-speed'], 10)
       return () => {
         return bps

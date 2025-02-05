@@ -1,6 +1,6 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const { assertTimespan } = require('../utils/assert-timespan')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
@@ -22,7 +22,7 @@ test('should work as expected with a slow readable', t => {
 
   throttleStream.on('end', function () {
     assertTimespan(t, startTime, Date.now(), 1000)
-    t.equal(10, bytes)
+    t.assert.deepStrictEqual(10, bytes)
   })
 
   pipeline(
@@ -46,7 +46,7 @@ test('should work as expected with a when input stream is providing bigger chunk
 
   throttleStream.on('end', function () {
     assertTimespan(t, startTime, Date.now(), 2000)
-    t.equal(3000, bytes)
+    t.assert.deepStrictEqual(3000, bytes)
   })
 
   pipeline(

@@ -1,6 +1,6 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
 const { pipeline } = require('node:stream')
@@ -18,10 +18,10 @@ test('_init is resilient against errors', t => {
   pipeline(
     randomStream,
     throttleStream,
-    err => { t.equal(err.message, 'ArbitraryError') }
+    err => { t.assert.deepStrictEqual(err.message, 'ArbitraryError') }
   )
-  t.equal(throttleStream._buffer, null)
-  t.equal(throttleStream._interval, null)
+  t.assert.deepStrictEqual(throttleStream._buffer, null)
+  t.assert.deepStrictEqual(throttleStream._interval, null)
 })
 
 test('intervalHandler is resilient against errors', t => {
@@ -42,11 +42,11 @@ test('intervalHandler is resilient against errors', t => {
     randomStream,
     throttleStream,
     err => {
-      t.equal(err.message, 'ArbitraryError')
+      t.assert.deepStrictEqual(err.message, 'ArbitraryError')
     }
   )
-  t.equal(throttleStream._buffer, null)
-  t.equal(throttleStream._interval, null)
+  t.assert.deepStrictEqual(throttleStream._buffer, null)
+  t.assert.deepStrictEqual(throttleStream._interval, null)
 })
 
 test('_transform is resilient against errors', t => {
@@ -63,11 +63,11 @@ test('_transform is resilient against errors', t => {
     randomStream,
     throttleStream,
     err => {
-      t.equal(err.message, 'ArbitraryError')
+      t.assert.deepStrictEqual(err.message, 'ArbitraryError')
     }
   )
-  t.equal(throttleStream._buffer, null)
-  t.equal(throttleStream._interval, null)
+  t.assert.deepStrictEqual(throttleStream._buffer, null)
+  t.assert.deepStrictEqual(throttleStream._interval, null)
 })
 
 test('should handle emitted errors properly', t => {
@@ -79,15 +79,15 @@ test('should handle emitted errors properly', t => {
   const throttleStream = new ThrottleStream({ bytesPerSecond: 1000 })
 
   throttleStream.on('data', function () {
-    t.ok(Date.now() - start < 1500)
+    t.assert.ok(Date.now() - start < 1500)
   })
 
   setTimeout(() => throttleStream.emit('error', new Error('ArbitraryError')), 1500)
   pipeline(
     randomStream,
     throttleStream,
-    err => { t.equal(err.message, 'ArbitraryError') }
+    err => { t.assert.deepStrictEqual(err.message, 'ArbitraryError') }
   )
-  t.equal(throttleStream._buffer, null)
-  t.equal(throttleStream._interval, null)
+  t.assert.deepStrictEqual(throttleStream._buffer, null)
+  t.assert.deepStrictEqual(throttleStream._interval, null)
 })

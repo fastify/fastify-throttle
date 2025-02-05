@@ -1,7 +1,6 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const { fastifyThrottle } = require('../index')
 const { assertTimespan } = require('./utils/assert-timespan')
@@ -42,8 +41,8 @@ test('stream (error)', async t => {
         // Once by fastify and once by the failed pipeline
         const err = data?.err ?? data
 
-        t.type(err, Error)
-        t.same(err.message, message)
+        t.assert.ok(err instanceof Error)
+        t.assert.deepStrictEqual(err.message, message)
       }
     })
   })
