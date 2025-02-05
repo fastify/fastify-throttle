@@ -5,15 +5,7 @@ const { assertTimespan } = require('../utils/assert-timespan')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
 const { pipeline } = require('node:stream')
-
-const withResolvers = function () {
-  let promiseResolve, promiseReject
-  const promise = new Promise((resolve, reject) => {
-    promiseResolve = resolve
-    promiseReject = reject
-  })
-  return { promise, resolve: promiseResolve, reject: promiseReject }
-}
+const { withResolvers } = require('../utils/promise')
 
 test('should take ~0 second to read 10,000 bytes at 10000bps', async t => {
   t.plan(4)
