@@ -3,9 +3,9 @@
 const { test } = require('node:test')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
-const { pipeline } = require('node:stream')
+const { pipeline } = require('node:stream/promises')
 
-test('_init is resilient against errors', t => {
+test('_init is resilient against errors', async t => {
   t.plan(3)
 
   const bytesPerSecondFn = function () {
@@ -15,16 +15,18 @@ test('_init is resilient against errors', t => {
   const randomStream = new RandomStream(10000)
   const throttleStream = new ThrottleStream({ bytesPerSecond: bytesPerSecondFn })
 
-  pipeline(
-    randomStream,
-    throttleStream,
-    err => { t.assert.deepStrictEqual(err.message, 'ArbitraryError') }
+  await t.assert.rejects(
+    pipeline(
+      randomStream,
+      throttleStream
+    ), 'ArbitratyError'
   )
+
   t.assert.deepStrictEqual(throttleStream._buffer, null)
   t.assert.deepStrictEqual(throttleStream._interval, null)
 })
 
-test('intervalHandler is resilient against errors', t => {
+test('intervalHandler is resilient against errors', async t => {
   t.plan(3)
 
   const bytesPerSecondFn = function (elapsedTime) {
@@ -38,18 +40,18 @@ test('intervalHandler is resilient against errors', t => {
   const randomStream = new RandomStream(10000)
   const throttleStream = new ThrottleStream({ bytesPerSecond: bytesPerSecondFn })
 
-  pipeline(
-    randomStream,
-    throttleStream,
-    err => {
-      t.assert.deepStrictEqual(err.message, 'ArbitraryError')
-    }
-  )
   t.assert.deepStrictEqual(throttleStream._buffer, null)
   t.assert.deepStrictEqual(throttleStream._interval, null)
+
+  await t.assert.rejects(
+    pipeline(
+      randomStream,
+      throttleStream
+    ), 'ArbitratyError'
+  )
 })
 
-test('_transform is resilient against errors', t => {
+test('_transform is resilient against errors', async t => {
   t.plan(3)
 
   const randomStream = new RandomStream(10000)
@@ -59,18 +61,18 @@ test('_transform is resilient against errors', t => {
     throw new Error('ArbitraryError')
   }
 
-  pipeline(
-    randomStream,
-    throttleStream,
-    err => {
-      t.assert.deepStrictEqual(err.message, 'ArbitraryError')
-    }
+  t.assert.equal(throttleStream._buffer, null)
+  t.assert.equal(throttleStream._interval, null)
+
+  await t.assert.rejects(
+    pipeline(
+      randomStream,
+      throttleStream
+    ), 'ArbitratyError'
   )
-  t.assert.deepStrictEqual(throttleStream._buffer, null)
-  t.assert.deepStrictEqual(throttleStream._interval, null)
 })
 
-test('should handle emitted errors properly', t => {
+test('should handle emitted errors properly', async t => {
   t.plan(5)
 
   const start = Date.now()
@@ -83,11 +85,14 @@ test('should handle emitted errors properly', t => {
   })
 
   setTimeout(() => throttleStream.emit('error', new Error('ArbitraryError')), 1500)
-  pipeline(
-    randomStream,
-    throttleStream,
-    err => { t.assert.deepStrictEqual(err.message, 'ArbitraryError') }
-  )
+
   t.assert.deepStrictEqual(throttleStream._buffer, null)
   t.assert.deepStrictEqual(throttleStream._interval, null)
+
+  await t.assert.rejects(
+    pipeline(
+      randomStream,
+      throttleStream
+    ), 'ArbitratyError'
+  )
 })
