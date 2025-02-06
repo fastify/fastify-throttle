@@ -1,7 +1,6 @@
 'use strict'
 
-const t = require('tap')
-const test = t.test
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const { fastifyThrottle } = require('../index')
 const { assertTimespan } = require('./utils/assert-timespan')
@@ -14,7 +13,7 @@ test('should not error when sending null', async t => {
 
   fastify.get('/throttled', {
     onSend: [(_request, _reply, _payload, done) => {
-      t.ok(true)
+      t.assert.ok(true)
       done(null, null)
     }],
     config: {
@@ -28,5 +27,5 @@ test('should not error when sending null', async t => {
 
   const response = await fastify.inject('/throttled')
   assertTimespan(t, startTime, Date.now(), 50, 100)
-  t.equal(response.body.length, 0)
+  t.assert.deepStrictEqual(response.body.length, 0)
 })

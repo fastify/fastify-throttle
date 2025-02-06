@@ -1,13 +1,14 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const { assertTimespan } = require('../utils/assert-timespan')
 const { ThrottleStream } = require('../../lib/throttle-stream')
 const { RandomStream } = require('../utils/random-stream')
 const { SlowRandomStream } = require('../utils/slow-random-stream')
+const { withResolvers } = require('../utils/promise')
 const { pipeline } = require('node:stream')
 
-test('should work as expected with a slow readable', t => {
+test('should work as expected with a slow readable', async t => {
   t.plan(3)
 
   const slowRandomStream = new SlowRandomStream(10) // should take ~1 second
@@ -20,16 +21,21 @@ test('should work as expected with a slow readable', t => {
     bytes += data.length
   })
 
+  const { resolve, promise } = withResolvers()
+
   throttleStream.on('end', function () {
     assertTimespan(t, startTime, Date.now(), 1000)
-    t.equal(10, bytes)
+    t.assert.deepStrictEqual(10, bytes)
+    resolve()
   })
 
   pipeline(
     slowRandomStream,
     throttleStream,
-    t.error
+    t.assert.ifError
   )
+
+  await promise
 })
 
 test('should work as expected with a when input stream is providing bigger chunk than bytesPerSecond', t => {
@@ -44,14 +50,19 @@ test('should work as expected with a when input stream is providing bigger chunk
     bytes += data.length
   })
 
+  const { resolve, promise } = withResolvers()
+
   throttleStream.on('end', function () {
     assertTimespan(t, startTime, Date.now(), 2000)
-    t.equal(3000, bytes)
+    t.assert.deepStrictEqual(3000, bytes)
+    resolve()
   })
 
   pipeline(
     randomStream,
     throttleStream,
-    t.error
+    t.assert.ifError
   )
+
+  return promise
 })
