@@ -1,4 +1,4 @@
-import {
+import type {
   FastifyPluginCallback, FastifyRequest,
 } from 'fastify'
 
