@@ -1,6 +1,6 @@
 import fastify, { FastifyRequest } from 'fastify'
 import fastifyThrottle from '..'
-import { expectType } from 'tsd'
+import { expect } from 'tstyche'
 
 const server = fastify()
 
@@ -12,10 +12,11 @@ server.register(fastifyThrottle, {
 })
 server.register(fastifyThrottle, {
   bytesPerSecond: (_req) => {
-    expectType<FastifyRequest>(_req)
+    expect(_req).type.toBeAssignableTo<FastifyRequest>()
+
     return (elapsedTime, bytes) => {
-      expectType<number>(elapsedTime)
-      expectType<number>(bytes)
+      expect(elapsedTime).type.toBe<number>()
+      expect(bytes).type.toBe<number>()
       return 200
     }
   }
@@ -23,10 +24,11 @@ server.register(fastifyThrottle, {
 
 server.register(fastifyThrottle, {
   bytesPerSecond: async (_req) => {
-    expectType<FastifyRequest>(_req)
+    expect(_req).type.toBeAssignableTo<FastifyRequest>()
+
     return (elapsedTime, bytes) => {
-      expectType<number>(elapsedTime)
-      expectType<number>(bytes)
+      expect(elapsedTime).type.toBe<number>()
+      expect(bytes).type.toBe<number>()
       return 200
     }
   }
@@ -35,10 +37,11 @@ server.register(fastifyThrottle, {
 server.register(fastifyThrottle, {
   async: true,
   bytesPerSecond: (_req) => {
-    expectType<FastifyRequest>(_req)
+    expect(_req).type.toBeAssignableTo<FastifyRequest>()
+
     return Promise.resolve((elapsedTime, bytes) => {
-      expectType<number>(elapsedTime)
-      expectType<number>(bytes)
+      expect(elapsedTime).type.toBe<number>()
+      expect(bytes).type.toBe<number>()
       return 200
     })
   }
